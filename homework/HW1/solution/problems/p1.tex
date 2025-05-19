@@ -1,0 +1,47 @@
+\item \defpoints{15} [Math review(Linear Algebra)] Rank properties. Suppose a matrix $A\in \mathbb{R}^{m\times n}$, prove:
+\begin{itemize}
+    \item[(a)] $\rank(A)\leq \min(m, n)$ ~\defpoints{4} (Hint: You just need to consider the foundamental transformation of the matrix. And how $\rank$ is defined.)
+    \item[(b)] $\rank(AB)\leq \min(\rank(A),\rank(B))$. ~\defpoints{4}
+    \item[(c)] $\rank(A^{\top}A)=\rank(A)$. ~\defpoints{4} (Hint: consider the identity between $\rank$ and $\nullity$)
+    \item[(d)] What does the rank of a matrix essentially refer to? (Hint: consider the correspondence to the singularvalues.) ~\defpoints{3}
+\end{itemize}
+
+\solution
+
+(a) The rank of a matrix is the same with the number of leading ones after row echelon form. The number of leading ones must be less than or equal to the minimum of the number of rows and the number of columns. \\
+Since the row echelon form of a matrix $A$ is a matrix $R$ with the same rank as $A$, we have $\rank(A)\leq \min(m, n)$.
+
+(b) Let $A$ be an $m \times n$ matrix, and denote its column vectors as: $A = [\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n]$, where $\mathbf{a}_i$ is the $i$-th column of $A$.
+
+The $j$-th column of $AB$ can be expressed as: $(AB)_j = A \mathbf{b}_j = \sum\limits_{i=1}^n b_{ij} \mathbf{a}_i,$
+where $\mathbf{b}_j$ is the $j$-th column of $B$. This shows that the columns of $AB$ are linear combinations of the columns of $A$. Thus:
+$$\text{rank}(AB) \leq \text{rank}(A)$$
+
+Let $B$ be an $n \times p$ matrix, and denote its row vectors as: $B = \begin{bmatrix} \mathbf{b}_1^\top \\ \mathbf{b}_2^\top \\ \vdots \\ \mathbf{b}_n^\top \end{bmatrix}$, where $\mathbf{b}_i^\top$ is the $i$-th row of $B$.
+
+The $i$-th row of $AB$ can be expressed as: $(AB)_i^\top = \mathbf{a}_i^\top B = \sum\limits_{j=1}^n a_{ij} \mathbf{b}_j^\top$, where $\mathbf{a}_i^\top$ is the $i$-th row of $A$. This shows that the rows of $AB$ are linear combinations of the rows of $B$. Thus:
+$$\text{rank}(AB) \leq \text{rank}(B)$$
+
+Combining the above results, we have:
+$$\text{rank}(AB) \leq \min\{\text{rank}(A), \text{rank}(B)\}$$
+
+
+
+
+
+
+
+
+(c) Since $\forall A\in\mathbb{R}^{m\times n}$, we have $\rank(A)+\nullity(A)=n$. \\
+Then we have $\rank(A^{\top}A)+\nullity(A^{\top}A)=n$. \\
+Thus we only need to prove $\nullity(A^{\top}A)=\nullity(A)$. \\
+
+$\Rightarrow$: $\forall \mathbf{x}\in\mathbb{R}^{n}$, if $\mathbf{x}\in\Null(A^{\top}A)$, i.e. $A^{\top}A\mathbf{x}=\mathbf{0}$, then we have $\mathbf{x}^{\top}A^{\top}A\mathbf{x}=\mathbf{0}\Rightarrow \mathbf{x}^{\top}(A^{\top}A\mathbf{x})=\mathbf{0}\Rightarrow \|A\mathbf{x}\|_2^{2}=0\Rightarrow A\mathbf{x}=\mathbf{0}\Rightarrow \mathbf{x}\in\Null(A)$.
+
+$\Leftarrow$: $\forall \mathbf{x}\in\mathbb{R}^{n}$, if $\mathbf{x}\in\Null(A)$, i.e. $A\mathbf{x}=\mathbf{0}$, then we have $A^{\top}A\mathbf{x}=A^{\top}\mathbf{0}=\mathbf{0}\Rightarrow \mathbf{x}\in\Null(A^{\top}A)$. \\
+
+So the null space of $A^{\top}A$ and $A$ are the same, which means $\nullity(A^{\top}A)=\nullity(A)$.
+
+(d) The number of non-zero singular values.
+
+\newpage

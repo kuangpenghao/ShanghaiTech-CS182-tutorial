@@ -1,0 +1,22 @@
+\item \defpoints{15} [Math review(Calculus)] Differential calculus of functions.
+
+\begin{itemize}
+    \item[(a)] Suppose $f: \mathbb{R} \rightarrow \mathbb{R}$ is a second order differentiable function. Write down the second order Taylor expansion of $f(x)$ around $x_0$ with Peano's form of the remainder. ~\defpoints{3}
+    \item[(b)] Suppose $f: \mathbb{R} \rightarrow \mathbb{R}$ is a second order differentiable function. Write down the first order and second order's mean value theorem for $f(x)$ related to point $x$ and $x+d$. ~\defpoints{4}
+    \item[(c)] Suppose $f: \mathbb{R}^n\rightarrow \mathbb{R}$ is a second order differentiable function. Write down the second order Taylor expansion of $f(\mathbf{x})$ around $\mathbf{x}_0$ with Peano's form of the remainder. ~\defpoints{4} (Hint: the first order derivative is the gradient $\nabla f$, the second order derivative is the Hessian $\nabla^2 f$.)
+    \item[(d)] Suppose $f: \mathbb{R}^n\rightarrow \mathbb{R}$ is a second order differentiable function. Write down the first order and second order's mean value theorem for $f(\mathbf{x})$ related to point $\mathbf{x}$ and $\mathbf{x}+\mathbf{d}$. ~\defpoints{4}
+\end{itemize}
+
+\solution
+
+(a) $f(x) = f(x_0) + f'(x_0)(x-x_0) + \dfrac{f''(x_0)}{2!}(x-x_0)^2 + o((x-x_0)^2)$.
+
+(b) First order: $\exists \xi\in(0,1)$, $f(x+d) = f(x) + f'(x+\xi d)d$. \\
+Second order: $\exists \xi\in(0,1)$, $f(x+d) = f(x) + f'(x)d + \dfrac{1}{2}f''(x+\xi d)d^2$.
+
+(c) $f(\mathbf{x}) = f(\mathbf{x}_0) + \nabla f(\mathbf{x}_0)^{\top}(\mathbf{x}-\mathbf{x}_0) + \dfrac{1}{2}(\mathbf{x}-\mathbf{x}_0)^{\top}\nabla^2 f(\mathbf{x}_0)(\mathbf{x}-\mathbf{x}_0) + o(\|\mathbf{x}-\mathbf{x}_0\|^2)$.
+
+(d) First order: $\exists \xi\in(0,1)$, $f(\mathbf{x}+\mathbf{d}) = f(\mathbf{x}) + \nabla f(\mathbf{x}+\xi\mathbf{d})^{\top}\mathbf{d}$. \\
+Second order: $\exists \xi\in(0,1)$, $f(\mathbf{x}+\mathbf{d}) = f(\mathbf{x}) + \nabla f(\mathbf{x})^{\top}\mathbf{d} + \dfrac{1}{2}\mathbf{d}^{\top}\nabla^2 f(\mathbf{x}+\xi\mathbf{d})\mathbf{d}$.
+
+\newpage

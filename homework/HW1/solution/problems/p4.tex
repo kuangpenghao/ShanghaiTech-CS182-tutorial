@@ -1,0 +1,51 @@
+\item \defpoints{15} [Math review(Probability and Statistics)]
+Suppose we have two random variables, $A$ and $B$, where $A$ takes on values $a_1, a_2$ and $B$ takes on values $b_1, b_2$. Let $P\left(A=a_1\right)=0.5$ and $P\left(B=b_1\right)=0.5$.
+\begin{itemize}
+    \item[(a)] Suppose $a_1$ and $b_2$ are disjoint (mutually exclusive). ~\defpoints{3} \\
+    1. What is $P\left(a_1, b_2\right)$? \\
+    2. What is $P\left(a_1, b_1\right)$? \\
+    3. What is $P\left(a_1 \mid b_2\right)$?
+
+    \item[(b)] Suppose instead that $A, B$ are independent. ~\defpoints{3} \\
+    1. What is $P\left(a_1, b_2\right)$? \\
+    2. What is $P\left(a_1, b_1\right)$? \\
+    3. What is $P\left(a_1 \mid b_2\right)$?
+    \item[(c)] A student is looking at her activity tracker (Fitbit/Apple Watch) data and she notices that she seems to sleep better on days that she exercises. They observe the following: \\
+    \begin{tabular}{lll}
+    Exercise & Good Sleep & Probability \\
+    yes & yes & 0.3 \\
+    yes & no & 0.2 \\
+    no & no & 0.4 \\
+    no & yes & 0.1
+    \end{tabular} \\
+    1. What is the $P($GoodSleep $=$ yes $|$ Exercise $=$ yes $)$? \\
+    2. Why doesn't $P($GoodSleep $=$ yes, Exercise $=$ yes $)=P($ GoodSleep $=$ yes $)\cdot P($ Exercise $=$ yes $)$? \\
+    3. The student merges her activity tracker data with her food logs and finds that the $P($Eatwell $=$ yes | Exercise $=$ yes, GoodSleep $=$ yes $)$ is 0.25. What is the probability of all three happening on the same day? ~\defpoints{3}
+
+    \item[(d)] What is the expectation of $X$ where $X$ is a single roll of a fair 6-sided die $(S=$ $\{1,2,3,4,5,6\})$? What is the variance of $X$? ~\defpoints{3}
+
+    \item[(e)] Imagine that we had a new die where the sides were $S=\{3,4,5,6,7,8\}$. How do the expectation and the variance compare to our original dice? ~\defpoints{3}
+\end{itemize}
+
+\solution
+
+(a) 1. $P\left(A=a_1, B=b_2\right)=0$ \\
+2. $P\left(A=a_1, B=b_1\right)=p\left(b_1 \mid a_1\right) p\left(a_1\right)=0.5$ since $p\left(b_1 \mid a_1\right)=1$ \\
+3. $P\left(A=a_1 \mid B=b_2\right)=0$
+
+(b) 1. $p\left(a_1, b_2\right)=0.25$ \\
+2. $p\left(a_1, b_1\right)=0.25$ since now $p\left(b_1 \mid a_1\right)=0.5$ \\
+3. $p\left(a_1 \mid b_2\right)=0.5$
+
+(c) 1. $P($ GoodSleep $=$ yes $\mid$ Exercise $=$ yes $)=\dfrac{0.3}{0.3+0.2}=0.6$ \\
+2. Good Sleep and Exercise are not independent. \\
+3. $P($ Eatwell $=$ yes, Exercise $=$ yes, GoodSleep $=$ yes $)=P($ Eatwell $=$ yes $|$ Exercise $=$ yes, GoodSleep $=$ yes $) * P($ Exercise $=$ yes, GoodSleep $=$ yes $)=0.075$
+
+(d) $\mathbb{E}[\mathrm{X}]=3.5$ \\
+$\Var[\mathrm{X}]=2.917$ \\
+For variance, we can do $\mathbb{E}\left[(X-\mathbb{E}[X])^2\right]$ or use the equivalent formulation $\mathbb{E}\left[X^2\right]-\mathbb{E}[X]^2$. In the first method, this gives $\dfrac{1}{6} \sum\limits_{x \in\{1,2,3,4,5,6\}}(x-3.5)^2$
+
+(e) $\mathbb{E}[\mathrm{X}]=5.5$ \\
+$\Var[\mathrm{X}]=2.917, \text { note } \Var[X+a]=\Var[X] \text { for scalar } a$
+
+\newpage
