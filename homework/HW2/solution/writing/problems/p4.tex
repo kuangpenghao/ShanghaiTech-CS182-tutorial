@@ -1,0 +1,32 @@
+\item \defpoints{10} [Convexity of Mutual Information] From the definition of the mutual information $I(X;Y)=\sum\limits_{x,y}p(x,y)\log\dfrac{p(x,y)}{p(x)p(y)}$, we know that $I(X;Y)$ is a function of $p(x,y)$. This is because we can obtain $p(x)$ and $p(y)$ by computing the marginal distribution of $p(x,y)$. However, $I(X;Y)$ is a non-convex and non-concave function of $p(x,y)$. Which is not a good property for optimization. \\
+In some specific cases, $p(x)$ as given. Then $I(X;Y)$ is a function of $p(y|x)$. Prove that $I(X;Y)$ is a convex function of $p(y|x)$. \\
+\textbf{[Hints:]}
+\begin{itemize}
+\item Log-sum Inequality when $n=2$:
+$$(a_1+a_2)\log\dfrac{a_1+a_2}{b_1+b_2}\leq a_1\log\dfrac{a_1}{b_1}+a_2\log\dfrac{a_2}{b_2}$$
+\item Consider $3$ mutual information terms $I_1(X;Y), I_2(X;Y), I_{\lambda}(X;Y)$, which are separately computed from distributions $p_1(y|x), p_2(y|x), p_{\lambda}(y|x)=\lambda p_1(y|x)+(1-\lambda)p_2(y|x), \lambda\in[0,1]$. Then only need to prove that $I_{\lambda}(X;Y)\leq \lambda I_1(X;Y)+(1-\lambda)I_2(X;Y)$.
+\end{itemize}
+
+\solution
+
+If $p(x)$ is fixed(given), $I(X;Y)$ is convex in $p(y|x)$. \\
+define: $3$ distributions: $p_1(y|x), p_2(y|x), p_{\lambda}(y|x)$, where \\
+$p_{\lambda}(y|x)=\lambda p_1(y|x)+(1-\lambda)p_2(y|x)$, $p_1(x)=p_2(x)=p_{\lambda}(x)=p(x)$.
+So
+\begin{align*}
+I_i(X;Y) &= \sum_{x,y}p_i(x,y)\log\dfrac{p_i(x,y)}{p_i(x)p_i(y)},\ \  i=1,2 \\
+I_{\lambda}(X;Y) &= \sum_{x,y}p_{\lambda}(x,y)\log\dfrac{p_{\lambda}(x,y)}{p_{\lambda}(x)p_{\lambda}(y)}
+\end{align*}
+From log-sum Inequality with $n=2$:
+$$(a_1+a_2)\log\dfrac{a_1+a_2}{b_1+b_2}\leq a_1\log\dfrac{a_1}{b_1}+a_2\log\dfrac{a_2}{b_2}$$
+\begin{align*}
+I_{\lambda}(X;Y) &= \sum_{x,y}p_{\lambda}(x,y)\log\dfrac{p_{\lambda}(x,y)}{p_{\lambda}(x)p_{\lambda}(y)} \\
+&= \sum_{x,y}p_{\lambda}(y|x)p_{\lambda}(x)\log\dfrac{p_{\lambda}(y|x)}{p_{\lambda}(y)} \\
+&= \sum_{x}p(x)\sum_y\left(\underbrace{\textcolor{blue}{\lambda p_1(y|x)}}_{\textcolor{blue}{a_1}}+\underbrace{\textcolor{red}{(1-\lambda)p_2(y|x)}}_{\textcolor{red}{a_2}}\right)\log\dfrac{\textcolor{blue}{\lambda p_1(y|x)}+\textcolor{red}{(1-\lambda)p_2(y|x)}}{\underbrace{\textcolor{green}{\lambda p_1(y)}}_{\textcolor{green}{b_1}}+\underbrace{\textcolor{yellow}{(1-\lambda)p_2(y)}}_{\textcolor{yellow}{b_2}}} \\
+&\leq \sum_{x}p(x)\sum_y\left[\lambda p_1(y|x)\log\dfrac{\lambda p_1(y|x)}{\lambda p_1(y)}+(1-\lambda)p_2(y|x)\log\dfrac{(1-\lambda)p_2(y|x)}{(1-\lambda)p_2(y)}\right] \\
+&= \lambda\sum_{x}p(x)\sum_y p_1(y|x)\log\dfrac{p_1(y|x)}{p_1(y)} + (1-\lambda)\sum_{x}p(x)\sum_y p_2(y|x)\log\dfrac{p_2(y|x)}{p_2(y)} \\
+&= \lambda I_1(X;Y) + (1-\lambda)I_2(X;Y)
+\end{align*}
+So we have proved that $I(X;Y)$ is convex in $p(y|x)$.\\
+
+\newpage

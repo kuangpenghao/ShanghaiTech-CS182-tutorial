@@ -1,0 +1,33 @@
+\item \defpoints{10} [Log-sum Inequality] Recall Jensen's inequality $f(\mathbb{E}(X)) \leq \mathbb{E}(f(X))$ if $f$ is convex for any random variable $X$. Proof the log-sum inequality:
+$$ \sum_{i=1}^{n} a_i \log \frac{a_i}{b_i} \geq \left( \sum_{i=1}^{n} a_i\right) \log \frac{\sum_{i=1}^{n} a_i}{\sum_{i=1}^{n} b_i} $$
+where $a_1,\ldots,a_n$ and $b_1,\ldots,b_n$ are positive numbers.
+
+\solution
+
+We can construct a distribution $X$ s.t. \\
+the domain of $X$ is $\dfrac{a_i}{b_i}, i\in\{1,2,\cdots,n\}$, and the PMF of $X$ is $P(X=\dfrac{a_i}{b_i})=\dfrac{b_i}{\sum\limits_{i=1}^{n}b_i}$.\\
+Since $\forall i \in\{1,2,\cdots,n\}, a_i > 0, b_i > 0$,\\
+So $P(X=\dfrac{a_i}{b_i}) > 0$, and $\sum\limits_{i=1}^{n}P(X=\dfrac{a_i}{b_i})=1$.\\
+So it's a valid distribution.\\
+So $$\mathbb{E}(X)=\sum\limits_{i=1}^{n} (\dfrac{a_i}{b_i})\cdot P(X=\dfrac{a_i}{b_i})=\sum\limits_{i=1}^{n} \dfrac{a_i}{b_i}\cdot \dfrac{b_i}{\sum\limits_{k=1}^{n}b_k}=\dfrac{\sum\limits_{i=1}^{n}a_i}{\sum\limits_{i=1}^{n}b_i}$$
+
+And constrtuct $f(x)=x\log x$, then $f'(x)=1+\log x$, $f''(x)=\dfrac{1}{x}$.\\
+Since $x>0$, so $f''(x)=\dfrac{1}{x}>0$.\\
+So $f(x)$ is strictly convex, so from the Jensen's inequality, we can get that\\
+$$f(\mathbb{E}(X)) \leq \mathbb{E}(f(X))$$
+i.e.
+\begin{align*}
+\left(\dfrac{\sum\limits_{i=1}^{n}a_i}{\sum\limits_{i=1}^{n}b_i}\right)\log \left(\dfrac{\sum\limits_{i=1}^{n}a_i}{\sum\limits_{i=1}^{n}b_i}\right) &\leq \sum\limits_{i=1}^{n} P(X=\dfrac{a_i}{b_i})\cdot f(\dfrac{a_i}{b_i}) \\
+\left(\dfrac{\sum\limits_{i=1}^{n}a_i}{\sum\limits_{i=1}^{n}b_i}\right)\log \left(\dfrac{\sum\limits_{i=1}^{n}a_i}{\sum\limits_{i=1}^{n}b_i}\right) &\leq \sum\limits_{i=1}^{n} \dfrac{b_i}{\sum\limits_{k=1}^nb_k}\cdot(\dfrac{a_i}{b_i})\log(\dfrac{a_i}{b_i})
+\end{align*}
+
+Since $b_i>0$, so $\sum\limits_{i=1}^nb_i>0$, so appointment $\sum\limits_{i=1}^nb_i$ on both sides simultaneously, we can get that
+$$\left(\sum\limits_{i=1}^{n} a_i\right) \log \left(\dfrac{\sum\limits_{i=1}^{n} a_i}{\sum\limits_{i=1}^{n} b_i}\right)
+\leq \sum\limits_{i=1}^{n} a_i\log \left(\dfrac{a_i}{b_i}\right)$$
+
+i.e. $$\sum\limits_{i=1}^{n} a_i \log \frac{a_i}{b_i} \geq \left( \sum_{i=1}^{n} a_i\right) \log \frac{\sum_{i=1}^{n} a_i}{\sum_{i=1}^{n} b_i}$$
+
+So above all, with such construction, we have proved the inequality
+$$\sum_{i=1}^{n} a_i \log \frac{a_i}{b_i} \geq \left( \sum_{i=1}^{n} a_i\right) \log \frac{\sum_{i=1}^{n} a_i}{\sum_{i=1}^{n} b_i}$$
+
+\newpage

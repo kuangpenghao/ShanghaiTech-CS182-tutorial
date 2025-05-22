@@ -1,0 +1,98 @@
+\item \defpoints{10} [Math review(Linear Algebra)] Singularvalue decomposition(SVD). \\
+$A=\left[\begin{array}{ll}1 & 1 \\ 0 & 1 \\ 1 & 0\end{array}\right]$. Find the SVD of $A=U \Sigma V^{\top}$.
+
+\solution
+$$A^{\top} A=\left[\begin{array}{lll}1 & 0 & 1 \\ 1 & 1 & 0\end{array}\right]\left[\begin{array}{ll}1 & 1 \\ 0 & 1 \\ 1 & 0\end{array}\right]=\left[\begin{array}{ll}2 & 1 \\ 1 & 2\end{array}\right]$$
+Then:
+$$p(\lambda)=\operatorname{det}\left(\lambda I_2-A\right)=\lambda^2-4 \lambda+3=(\lambda-3)(\lambda-1)$$
+$$p(\lambda)=0\Rightarrow\lambda_1=3, \lambda_2=1$$
+1. Notice that here we require $\lambda_1>\lambda_2$. So we get the two singular values of $A$ are $\sigma_1=\sqrt{3}, \sigma_2=\sqrt{1}=1$. So the diagonal matrix $\Sigma \in \mathbb{R}^{3 \times 2}$ is:
+$$\Sigma=\left[\begin{array}{cc}
+\sqrt{3} & 0 \\
+0 & 1 \\
+0 & 0
+\end{array}\right]$$
+
+2. Then we can get the orthogonal matrix $V\in\mathbb{R}^{2\times 2}$ by the eigenvectors of $A^{\top} A$:
+$$\left(\lambda_1 I_2-A^{\top} A\right) x=0$$
+Normalize the basis of the solution space, we get $v_1=\left[\begin{array}{c}\frac{\sqrt{2}}{2} \\ \frac{\sqrt{2}}{2}\end{array}\right]$. Solve the homogeneous equation:
+$$\left(\lambda_2 I_2-A^{\top} A\right) \boldsymbol{x}=0$$
+Normalize the basis of the solution space, we get $v_2=\left[\begin{array}{c}\frac{\sqrt{2}}{2} \\ -\frac{\sqrt{2}}{2}\end{array}\right]$. So we get:
+$$
+V=\left[\begin{array}{ll}
+v_1 & v_2
+\end{array}\right]=\left[\begin{array}{cc}
+\frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2} \\
+\frac{\sqrt{2}}{2} & -\frac{\sqrt{2}}{2}
+\end{array}\right] .
+$$
+
+3. Now we get the orthogonal matrix $U\in\mathbb{R}^{3\times 3}$, we know that the last two columns of $U$ are:
+$$
+\begin{aligned}
+& \boldsymbol{u}_1=\frac{1}{\sigma_1} A \boldsymbol{v}_1=\frac{\sqrt{3}}{3}\left[\begin{array}{ll}
+1 & 1 \\
+0 & 1 \\
+1 & 0
+\end{array}\right]\left[\begin{array}{c}
+\frac{\sqrt{2}}{2} \\
+\frac{\sqrt{2}}{2}
+\end{array}\right]=\left[\begin{array}{c}
+\frac{\sqrt{6}}{3} \\
+\frac{\sqrt{6}}{6} \\
+\frac{\sqrt{6}}{6}
+\end{array}\right], \\
+& \boldsymbol{u}_2=\frac{1}{\sigma_2} A \boldsymbol{v}_7=1\left[\begin{array}{ll}
+1 & 1 \\
+0 & 1 \\
+1 & 0
+\end{array}\right]\left[\begin{array}{c}
+\frac{\sqrt{2}}{2} \\
+-\frac{\sqrt{2}}{2}
+\end{array}\right]=\left[\begin{array}{c}
+0 \\
+-\frac{\sqrt{2}}{2} \\
+\frac{\sqrt{21}}{2}
+\end{array}\right] .
+\end{aligned}
+$$
+
+Then we need to find the third column vector $\boldsymbol{u}_3 \in \mathbb{R}^3$ such that $\left\{\boldsymbol{u}_1, \boldsymbol{u}_2, \boldsymbol{u}_3\right\}$ forms an orthonormal basis of $\mathbb{R}^3$:
+
+$$
+\begin{aligned}
+& \boldsymbol{x} \cdot \boldsymbol{u}_1=\frac{\sqrt{6}}{3} x_1+\frac{\sqrt{6}}{6} x_2+\frac{\sqrt{6}}{6} x_3=0 \\
+& x \cdot \boldsymbol{u}_2=0 x_1-\frac{\sqrt{2}}{2} x_2+\frac{\sqrt{2}}{2} x_3=0
+\end{aligned}
+$$
+Solve the linear equations:
+$$
+\left[\begin{array}{ccc}
+\frac{\sqrt{3}}{3} & \frac{\sqrt{6}}{6} & \frac{\sqrt{G}}{6} \\
+0 & -\frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{2}
+\end{array}\right]\left[\begin{array}{l}
+x_1 \\
+x_2 \\
+x_3
+\end{array}\right]=\left[\begin{array}{l}
+0 \\
+0 \\
+0
+\end{array}\right]
+$$
+
+We can get that a basis of $\operatorname{span}\left\{u_1, u_2\right\}^{+}$ is $x=\left[\begin{array}{c}-1 \\ 1 \\ 1\end{array}\right]$, normalize it we can get that $u_3=\dfrac{x}{\|x\|}=\left[\begin{array}{c}-\frac{1}{\sqrt{3}} \\ \frac{1}{\sqrt{3}} \\ \frac{1}{\sqrt{3}}\end{array}\right]$. Thus:
+
+$$
+U=\left[\begin{array}{lll}
+u_1 & u_2 & u_3
+\end{array}\right]=\left[\begin{array}{ccc}
+\frac{\sqrt{4}}{3} & 0 & -\frac{1}{\sqrt{3}} \\
+\frac{\sqrt{6}}{6} & -\frac{\sqrt{2}}{2} & \frac{1}{\sqrt{3}} \\
+\frac{\sqrt{6}}{3} & \frac{\sqrt{3}}{2} & \frac{1}{\sqrt{3}}
+\end{array}\right]
+$$
+
+$$A=\begin{bmatrix}1&0\\0&1\\1&0\end{bmatrix}=\begin{bmatrix}\frac{\sqrt{6}}{3}&0&-\frac{\sqrt{3}}{3}\\\frac{\sqrt{6}}{6}&-\frac{\sqrt{2}}{2}&\frac{\sqrt{3}}{3}\\\frac{\sqrt{6}}{6}&\frac{\sqrt{2}}{2}&\frac{\sqrt{3}}{3}\end{bmatrix}\begin{bmatrix}\sqrt{3}&0\\0&1\\0&0\end{bmatrix}\begin{bmatrix}\frac{\sqrt{2}}{2}&\frac{\sqrt{2}}{2}\\\frac{\sqrt{2}}{2}&-\frac{\sqrt{2}}{2}\end{bmatrix}$$
+
+\newpage

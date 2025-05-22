@@ -1,0 +1,128 @@
+\item \defpoints{25} [Convex Optimization Basics] Norm for a vector $\mathbf{x}\in\mathbb{R}^n$ or for a matrix $X\in\mathbb{R}^{m\times n}$ is a function $f:\mathbb{R}^{n}\rightarrow\mathbb{R}$ or $f:\mathbb{R}^{m\times n}\rightarrow\mathbb{R}$, which is widely used in optimization. Take vector's norm as example: they have many properties: 1. $f(\mathbf{x})\geq 0$, iff $\mathbf{x}=\mathbf{0}$ the equality holds; 2. $f(\alpha\mathbf{x})=|\alpha| f(\mathbf{x})$ for any $\alpha\in\mathbb{R}$; 3. $f(\mathbf{x}+\mathbf{y})\leq f(\mathbf{x})+f(\mathbf{y})$ for any $\mathbf{x},\mathbf{y}\in\mathbb{R}^n$. And matrices norms are similar, but you \textbf{should not} use them directly in this problem.
+\begin{itemize}
+    \item[(a)] Proof: Any vector norm $f:\mathbb{R}^{n}\rightarrow\mathbb{R}$ is convex. [Hint: Consider the definition of convex function: $\forall\theta\in[0,1], f(\theta\mathbf{x}+(1-\theta)\mathbf{y})\leq \theta f(\mathbf{x})+(1-\theta)f(\mathbf{y})$.] ~\defpoints{5}
+    \item[(b)] Let $f(X) = \|X\|_2$ be the spectral norm of a matrix $X \in \mathbb{R}^{m \times n}$, defined as the largest singular value of $X$. Prove that $f(X)$ is convex. [$\textcolor{blue}{\text{Hints:} 1. \lambda_{\max}(A)=\sup\limits_{\mathbf{y}\in\mathbb{R}^n}\dfrac{\mathbf{y}^{\top}A\mathbf{y}}{\|\mathbf{y}\|_2^2}, 2. \forall\mathbf{y}, \text{if } g(X,\mathbf{y}) \text{is convex in } X, \text{then }}$ $\textcolor{blue}{f(X)=\sup\limits_{\mathbf{y}\in\mathbb{R}^n}g(X,\mathbf{y}) \text{ is convex}}.$] \defpoints{10}
+    \item[(c)] Let $f(X) = \sum\limits_{i=1}^{r} \sigma_i(X)$ be the the nuclear norm of  a matrix $X \in \mathbb{R}^{m \times n}$,where $\sigma_i(X)$ are the singular values of $X$. Prove that $f(X)$ is convex. [$\textcolor{blue}{\text{Hint: } \|X\|_* = \sup\limits_{\|Z\|_2 \leq 1} <Z,X>}$] \defpoints{10}
+\end{itemize}
+
+\solution
+
+(a) Since $f$ is a norm function, we have the properties of norm functions that,\\
+1. $\forall \mathbf{x},\mathbf{y}\in \mathbb{R}^{n}, f(\mathbf{x}+\mathbf{y})\leq f(\mathbf{x})+f(\mathbf{y})$.\\
+2. $\forall \mathbf{x}\in \mathbb{R}^{n}, \forall a \in \mathbb{R}, f(a\mathbf{x})=|a|f(\mathbf{x})$.\\
+So we have, $\forall \mathbf{x},\mathbf{y}\in \mathbb{R}^{n}, \forall \theta \in [0,1]$,\\
+From property 1., we can get that
+$$f(\theta \mathbf{x}+(1-\theta)\mathbf{y})\leq f(\theta \mathbf{x})+f((1-\theta)\mathbf{y})$$
+From property 2., we can get that
+$$f(\theta \mathbf{x})=|\theta|f(\mathbf{x})\ \text{and}\ f((1-\theta)\mathbf{y})=|1-\theta|f(\mathbf{y})$$
+Since $\theta \in [0,1]$, so we have $|\theta|=\theta$ and $|1-\theta|=1-\theta$,\\
+So we can get that $\forall \mathbf{x},\mathbf{y}\in \mathbb{R}^{n}, \forall \theta \in [0,1]$,
+$$f(\theta \mathbf{x}+(1-\theta)\mathbf{y})\leq \theta f(\mathbf{x})+(1-\theta)f(\mathbf{y})$$
+So above all, from the defination, we can get that $f$ is a convex function.
+
+
+
+(b) $f(X)=\sqrt{\lambda_{\max}(X^{\top}X)} = \sqrt{\sup\limits_{\mathbf{y}\in\mathbb{R}^n}\dfrac{\mathbf{y}^{\top}(X^{\top}X)\mathbf{y}}{\|\mathbf{y}\|_2^2}}= \sup\limits_{\mathbf{y}\in\mathbb{R}^n}\sqrt{\dfrac{(X\mathbf{y})^{\top}(X\mathbf{y})}{\|\mathbf{y}\|_2^2}} = \sup\limits_{\mathbf{y}\in\mathbb{R}^n}\dfrac{\|X\mathbf{y}\|_2}{\|\mathbf{y}\|_2}$
+
+Let $g(X,\mathbf{y})=\dfrac{\|X\mathbf{y}\|_2}{\|\mathbf{y}\|_2}$, then for a fixed $\mathbf{y}$, and $\forall X_1, X_2\in\mathbb{R}^{m\times n}$, $\forall \theta\in[0,1]$, we have
+\begin{align*}
+g(\theta X_1+(1-\theta)X_2,\mathbf{y}) &= \dfrac{\|\left[\theta X_1+(1-\theta)X_2\right]\mathbf{y}\|_2}{\|\mathbf{y}\|_2} \\
+&\leq \dfrac{\|\theta X_1\mathbf{y}\|_2+\|(1-\theta)X_2\mathbf{y}\|_2}{\|\mathbf{y}\|_2} \\
+&= \theta\dfrac{\|X_1\mathbf{y}\|_2}{\|\mathbf{y}\|_2}+(1-\theta)\dfrac{\|X_2\mathbf{y}\|_2}{\|\mathbf{y}\|_2} \\
+&= \theta g(X_1,\mathbf{y})+(1-\theta)g(X_2,\mathbf{y})
+\end{align*}
+
+So when $\mathbf{y}$ is fixed, $g(X,\mathbf{y})$ is convex in $X$.\\
+From the property of pointwise supremum, we have for each $\mathbf{y}$, $g(X,\mathbf{y})=\dfrac{\|X\mathbf{y}\|_2}{\|\mathbf{y}\|_2}$ is convex in $X$. \\
+Then $f(X)=\sup\limits_{\mathbf{y}\in\mathbb{R}^n}g(X,\mathbf{y})$ is convex.
+
+
+(c) Similarly with the relation between $L_1$ norm and $L_{\infty}$ norm, we could guess that the nuclear norm is the dual norm of the spectral norm. And we could prove our guess. \\
+Define $\|X\|_*=\sum\limits_{i=1}^{r}\sigma_i(X)$ to be the nuclear norm, and $\|X\|_2=\sigma_{\max}(X)$ to be the spectral norm. \\
+i.e. we want to prove that
+$$\|X\|_* = \sup_{\|Z\|_2 \leq 1} <Z,X>$$
+
+We firstly apply SVD to $X$, and we have $X=U\Sigma V^{\top}$, where $U\in\mathbb{R}^{m\times m}$, $V\in\mathbb{R}^{n\times n}$ are orthogonal matrices, and $\Sigma\in\mathbb{R}^{m\times n}$ is a diagonal matrix with singular values on the diagonal. And suppose that $X$ has $r$ singular values. \\
+Define $P=UV^{\top}=UI_nV^{\top}$, then we could find that all the singular values of $P$ are $1$, i.e. $\|P\|_2=1$. \\
+Then we can get that
+\begin{align*}
+\sup_{\|Z\|_2\leq 1}<Z,X> &= \sup_{\|Z\|_2\leq 1}\Tr(Z^{\top}X) \\
+&\geq \Tr(P^{\top}X) \text{\qquad\qquad\quad ($\|P\|_2=1\leq 1$) satisfies the constraint} \\
+&= \Tr((UV^{\top})^{\top}U\Sigma V^{\top}) \\
+&= \Tr(V^{\top}VU^{\top}U\Sigma) \text{\qquad ($\Tr(AB)=\Tr(BA)$)} \\
+&= \Tr(\Sigma) \\
+&= \sum_{i=1}^{r}\sigma_i(X) \\
+&= \|X\|_*
+\end{align*}
+i.e. we have proved that
+\begin{equation}
+\textcolor{blue}{\|X\|_* \leq \sup_{\|Z\|_2 \leq 1} <Z,X>}
+\label{eq:leq}
+\end{equation}
+
+Then we can prove the other direction of the inequality. \\
+\begin{align*}
+\sup_{\|Z\|_2 \leq 1} <Z,X> &= \sup_{\|Z\|_2 \leq 1} \Tr\left(Z^{\top}\left(U\Sigma V^{\top}\right)\right) \\
+&= \sup_{\|Z\|_2 \leq 1} \Tr\left(\left(V^{\top}Z^{\top}U\right)\Sigma\right) \text{\qquad ($\Tr(AB)=\Tr(BA)$)}
+\end{align*}
+\begin{align*}
+\sup_{\|Z\|_2 \leq 1} <Z,X> &= \sup_{\|Z\|_2 \leq 1} \sum_{i=1}^{r}\sigma_i\left(X\right)\cdot\left(V^{\top}Z^{\top}U\right)_{ii} \\
+&= \sup_{\|Z\|_2 \leq 1} \sum_{i=1}^{r}\sigma_i\left(X\right)\left(u_i^{\top}Zv_i\right) \text{\qquad\qquad\ ($u_i,v_i$ are the $i$-th column of $U,V$)} \\
+&= \sup_{\|Z\|_2 \leq 1} \sum_{i=1}^{r}\sigma_i\left(X\right)\left\|u_i^{\top}Zv_i\right\|_2 \\
+&\leq \sup_{\|Z\|_2 \leq 1} \sum_{i=1}^{r}\sigma_i\left(X\right)\left\|u_i\right\|_2\left\|Z\right\|_2\left\|v_i\right\|_2 \text{\quad (Cauchy-Schwarz Inequality)} \\
+&\leq \sum_{i=1}^{r}\sigma_i\left(X\right) \text{\qquad\qquad\qquad\qquad\qquad\quad\ ($\|Z\|_2\leq 1, \left\|u_i\right\|_2=\left\|v_i\right\|_2=1$)} \\
+&= \|X\|_*
+\end{align*}
+
+
+i.e. we have proved that
+\begin{equation}
+\textcolor{blue}{\|X\|_* \geq \sup_{\|Z\|_2 \leq 1} <Z,X>}
+\label{eq:geq}
+\end{equation}
+
+So combine the inequalities (\ref{eq:leq}) and (\ref{eq:geq}) we can get that the nuclear norm is the dual norm of the spectral norm. i.e.
+\begin{equation}
+\textcolor{blue}{\|X\|_* = \sup_{\|Z\|_2 \leq 1} <Z,X>}
+\label{eq:dual}
+\end{equation}
+
+
+And then we prove the triangle inequality of the nuclear norm: $\forall X,Y\in\mathbb{R}^{m\times n}$,
+\begin{align*}
+\|X+Y\|_* &= \sup_{\|Z\|_2 \leq 1} <Z,X+Y> \text{\quad\quad\quad\quad\quad\quad\quad\  (By the equation (\ref{eq:dual}) we have proved)} \\
+&= \sup_{\|Z\|_2 \leq 1} \left(<Z,X>+<Z,Y>\right) \\
+&\leq \sup_{\|Z\|_2 \leq 1} <Z,X> + \sup_{\|Z\|_2 \leq 1} <Z,Y> \text{\quad (By the property of supremum)} \\
+&= \|X\|_* + \|Y\|_*
+\end{align*}
+
+So we have proved that $\forall X,Y\in\mathbb{R}^{m\times n}$,
+\begin{equation}
+\textcolor{blue}{\|X+Y\|_* \leq \|X\|_* + \|Y\|_*}
+\label{eq:triangle}
+\end{equation}
+
+
+Suppose that the $i$-th eigenvalue of $X^{\top}X$ is $\lambda_i(X^{\top}X)$, and the $i$-th singular value of $X$ is $\sigma_i(X)$. Which means that $\sigma_i(X)=\sqrt{\lambda_i(X^{\top}X)}$. \\
+Then we have the $i$-th singular value of $\theta X$, where $\theta\in[0,1]$ is
+$$\sigma_i(\theta X)=\sqrt{\lambda_i((\theta X)^{\top}(\theta X))}=\sqrt{\lambda_i(\theta^2X^{\top}X)}=\theta\sqrt{\lambda_i(X^{\top}X)}=\theta\sigma_i(X)$$
+So we have
+$$\|\theta X\|_* = \sum_{i=1}^{r}\sigma_i(\theta X) = \sum_{i=1}^{r}\theta\sigma_i(X) = \theta\sum_{i=1}^{r}\sigma_i(X) = \theta\|X\|_*$$
+So above all, we have proved that $\forall\theta\in[0,1]$,
+\begin{equation}
+\textcolor{blue}{\|\theta X\|_* = \theta\|X\|_*}
+\label{eq:homo}
+\end{equation}
+
+
+With the above conclusions, we could prove that $\forall X_1,X_2\in\mathbb{R}^{m\times n}, \theta\in[0,1]$
+\begin{align*}
+f(\theta X_1 + (1-\theta)X_2) &= \|\theta X_1 + (1-\theta)X_2\|_* \\
+&\leq \|\theta X_1\|_* + \|(1-\theta)X_2\|_* \text{\quad\quad\quad (By the inequality (\ref{eq:triangle}) we have proved)} \\
+&= \theta\|X_1\|_* + (1-\theta)\|X_2\|_* \text{\quad\quad\quad (By the equality (\ref{eq:homo}) we have proved)} \\
+&= \theta f(X_1) + (1-\theta)f(X_2)
+\end{align*}
+
+So above all, we have proved that the nuclear norm is convex.
+
+\newpage
