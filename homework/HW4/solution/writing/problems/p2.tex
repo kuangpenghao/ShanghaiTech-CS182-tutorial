@@ -1,0 +1,59 @@
+\item \defpoints{15} [Maximum Likelihood Estimation (MLE)]
+
+Consider real-valued variables $X$ and $Y$, in which $Y$ is generated conditional on $X$ according to
+$$Y = aX + b + \epsilon, \ \text{where} \ \epsilon \sim \mathcal{N}(0, \sigma^2)$$
+Here $\epsilon$ is an independent variable, called a noise term, which is drawn from a Gaussian distribution with mean 0, and variance $\sigma^2$. This is a single variable linear regression model, where $a$ is the only weight parameter and $b$ denotes the intercept. The conditional probability of $Y$ has a distribution $p(Y | X, a, b) \sim \mathcal{N}(aX+b, \sigma^2)$, so it can be written as:
+$$p(Y|X, a,b) = \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(Y - aX -b)^2\right)$$
+
+(a) Assume we have a training dataset of $n$ i.i.d. pairs $(x_i, y_i), i = 1, 2, \ldots, n$, and the likelihood function is defined by $\mathcal{L}(a,b) = \prod\limits_{i=1}^n p(y_i | x_i, a, b)$. Please write the Maximum Likelihood Estimation (MLE) problem for estimating $a$ and $b$. ~\defpoints{5}
+
+(b) Estimate the optimal solution of $a$ and $b$ by solving the MLE problem in (a).~\defpoints{5}
+
+(c) Based on the result in (b), argue that the learned linear model $f(X) = aX + b$, always passes through the point $(\bar{x},\bar{y})$, where $\bar{x} = \dfrac{1}{n}\sum\limits_{i=1}^{n}x_{i}$ and $\bar{y} = \dfrac{1}{n}\sum\limits_{i=1}^{n}y_{i}$ denote the sample means.~\defpoints{5}
+
+\solution
+
+(a) the MLE of $a$ and $b$ is: \\
+$$\hat{a},\hat{b}=\argmax\limits_{a,b}\mathcal{L}(a,b)=\argmax\limits_{a,b}\prod\limits_{i=1}^np(y_i|x_i,a,b)=\argmax\limits_{a,b}\prod\limits_{i=1}^n\dfrac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y_i-ax_i-b)^2\right)$$
+Take log to the likelihood function, we could get:
+$$\hat{a},\hat{b}=\argmax\limits_{a,b}\sum\limits_{i=1}^n\log\left(\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y_i-ax_i-b)^2\right)\right)$$
+Since $\dfrac{1}{\sqrt{2\pi}\sigma}$ has nothing with $a,b$, and $\sigma$ is just the variance of the noise term, so $\dfrac{1}{\sqrt{2\pi}\sigma}, -\dfrac{1}{2\sigma^2}$ are just constants. So
+$$\hat{a},\hat{b}=\argmax\limits_{a,b}\sum\limits_{i=1}^n-(y_i-ax_i-b)^2=\argmin\limits_{a,b}\sum\limits_{i=1}^n(y_i-ax_i-b)^2$$
+
+So above all, the MLE problem for estimating $a$ and $b$ is:
+$$\hat{a},\hat{b}=\argmin\limits_{a,b}\sum\limits_{i=1}^n(y_i-ax_i-b)^2$$
+
+(b) Since $\sum\limits_{i=1}^n(y_i-ax_i-b)^2$ is a convex function both for $a$ and $b$, so we just need to set the derivative of $\sum\limits_{i=1}^n(y_i-ax_i-b)^2$ to 0 to get the optimal solution. \\
+Let $f(a,b)=\sum\limits_{i=1}^n(y_i-ax_i-b)^2,\bar{x}=\dfrac{1}{n}\sum\limits_{i=1}^nx_i,\bar{y}=\dfrac{1}{n}\sum\limits_{i=1}^ny_i$, thus \\
+\begin{align*}
+\dfrac{\partial f}{\partial b} &= \sum\limits_{i=1}^n-2(y_i-ax_i-b)=2nb-2\sum\limits_{i=1}^n(y_i-ax_i) \\
+\dfrac{\partial f}{\partial b}=0 &\Rightarrow 2nb=2\sum\limits_{i=1}^n(y_i-ax_i) \\
+&\Rightarrow b=\dfrac{1}{n}\sum\limits_{i=1}^ny_i-\dfrac{1}{n}a\sum\limits_{i=1}^nx_i \\
+&\Rightarrow b = \bar{y}-a\bar{x}
+\end{align*}
+
+Similarly
+\begin{align*}
+\dfrac{\partial f}{\partial a} &= \sum\limits_{i=1}^n-2x_i(y_i-ax_i-b)=(-2)\sum\limits_{i=1}^nx_iy_i-(-2)\sum\limits_{i=1}^nax_i^2-(-2)\sum\limits_{i=1}^nbx_i \\
+\dfrac{\partial f}{\partial a}=0 &\Rightarrow \sum\limits_{i=1}^nx_iy_i-a\sum\limits_{i=1}^nx_i^2-b\sum\limits_{i=1}^nx_i=0
+\end{align*}
+put $b=\bar{y}-a\bar{x}$ into the above equation, we could get:
+$$\sum\limits_{i=1}^nx_iy_i-a\sum\limits_{i=1}^nx_i^2-(\bar{y}-a\bar{x})\sum\limits_{i=1}^nx_i=0 \Rightarrow a=\dfrac{\sum\limits_{i=1}^nx_iy_i-n\bar{x}\bar{y}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2}$$
+
+And put $a=\dfrac{\sum\limits_{i=1}^nx_iy_i-n\bar{x}\bar{y}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2}$ into $b=\bar{y}-a\bar{x}$, we could get: \\
+$$b=\bar{y}-\dfrac{\sum\limits_{i=1}^nx_iy_i-n\bar{x}\bar{y}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2}\bar{x}=\dfrac{\sum\limits_{i=1}^nx_i^2\bar{y}-\sum\limits_{i=1}^nx_iy_i\bar{x}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2}$$
+
+So above all, the optimal solution of $a$ and $b$ is:
+\begin{align*}
+a &= \dfrac{\sum\limits_{i=1}^nx_iy_i-n\bar{x}\bar{y}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2} \\
+b &= \bar{y}-a\bar{x}=\dfrac{\sum\limits_{i=1}^nx_i^2\bar{y}-\sum\limits_{i=1}^nx_iy_i\bar{x}}{\sum\limits_{i=1}^nx_i^2-n(\bar{x})^2}
+\end{align*}
+
+(c) From the analysis in (b), we could get that: \\
+$$b=\bar{y}-a\bar{x}$$
+Put $(\bar{x},\bar{y})$ into the linear model $f(X)=aX+b$, we could get: \\
+$$f(\bar{x})=a\bar{x}+b=a\bar{x}+\bar{y}-a\bar{x}=\bar{y}$$
+
+So above all, the learned linear model $f(X)=aX+b$ always passes through the point $(\bar{x},\bar{y})$.
+
+\newpage
