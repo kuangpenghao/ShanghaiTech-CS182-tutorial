@@ -1,0 +1,32 @@
+\item \defpoints{15} [Convolutional Neural Networks]
+
+\begin{enumerate}
+    \item Consider a sequential 2D convolution block: the input dimension is 4 $\times$ 64 $\times$ 64 (channel, width, height) and we use \textbf{two} continously Conv2D layer. The first layer is with 4 channels input and 8 channels output, where the kernel size is 3 $\times$ 3 (width, height). And the second layer is with 8 channels input and 16 channels output, where the kernel size is 5 $\times$ 5 (width, height). Set both the layers with stride = 1 and pad = 1. What is the output dimension after each layer? How many parameters do we have in these two layers in total? \defpoints{10} [Hint: Do not forget the bias term.]
+    \item The convolution block is followed by a max pooling layer with $2\times 2$ (width, height) filter and stride
+    = 2. What is the output dimension of the pooling layer? How many parameters do we have in the pooling
+    layer? \defpoints{5}
+\end{enumerate}
+
+[Hint]: You can check the \href{https://pytorch.org/docs/stable/nn.html#convolution-layers}{pytorch document} for details.
+
+\solution
+
+(a) Since the input image is $4\times 64\times 64$, so $W=64,H=64$. \\
+And since stride $S=1$, pad $P=1$, kernel size $F=3$, \\
+so the output dimension is $W_{conv}=\dfrac{W+2P-F}{S}+1=64$, $H_{conv}=\dfrac{H+2P-F}{S}+1=64$. \\
+So the dimension of the output for the first layer is $8\times 64\times 64$, and similarly, the dimension of the output for the second layer is $16\times 62\times 62$. \\
+
+For the first convolution layer, the kernels have total $8\times 4\times 3\times 3=288$ parameters. And each kernel has a bias, which is $8\times 1=8$ parameter.\\
+And for the second convolution layer, the kernels have total $16\times 8\times 5\times 5=3200$ parameters. And each kernel has a bias, which is $16\times 1=16$ parameter.\\
+So the total number of parameters is $288+8+3200+16=3512$.
+
+(b) Since the output dimension of the convolution layer is $16\times 62\times 62$.\\
+And for the pooling layer, the filter dimension is $F' = 2$, stride $S'=2$,\\
+so the output dimension is $W_{pooling}=\dfrac{W_{conv}-F'}{S'}+1=31$, $H_{pooling}=\dfrac{H_{conv}-F'}{S'}+1=31$.\\
+So the output dimension is $16\times 31\times 31$.
+
+And since the pooling layer is a max pooling layer, so there is no parameter in this layer.
+
+So above all, the output dimension is $16\times 31\times 31$, and the total number of parameters is $0$.
+
+\newpage
