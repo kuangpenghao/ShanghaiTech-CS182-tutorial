@@ -358,14 +358,13 @@ $$\begin{array}{ll}
   - Dual problem:
   $\begin{aligned}
   \max\limits_{\boldsymbol{\lambda}} &\quad \mathbf{b}^{\top}\boldsymbol{\lambda} \\
-  s.t. &\quad \mathbf{A}^{\top}\boldsymbol{\lambda} \preceq \mathbf{c} \\
-  &\quad \boldsymbol{\lambda} \preceq 0
+  s.t. &\quad \mathbf{A}^{\top}\boldsymbol{\lambda} \preceq \mathbf{c}
   \end{aligned}$
   </div>
 
 </div>
 
-$\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}, \boldsymbol{\nu}) = \mathbf{c}^{\top}\mathbf{x} + \boldsymbol{\lambda}^{\top}(\mathbf{Ax}-\mathbf{b})\textcolor{red}{-}\boldsymbol{\nu}^{\top}\mathbf{x}=(\mathbf{c}-\mathbf{A}^{\top}\boldsymbol{\lambda}-\boldsymbol{\nu})^{\top}\mathbf{x} - \mathbf{b}^{\top}\boldsymbol{\lambda}$
+$\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}, \boldsymbol{\nu}) = \mathbf{c}^{\top}\mathbf{x} + \boldsymbol{\lambda}^{\top}(\mathbf{Ax}-\mathbf{b})\textcolor{red}{-}\boldsymbol{\nu}^{\top}\mathbf{x}=(\mathbf{c}+\mathbf{A}^{\top}\boldsymbol{\lambda}-\boldsymbol{\nu})^{\top}\mathbf{x} - \mathbf{b}^{\top}\boldsymbol{\lambda}$
 $g(\boldsymbol{\lambda}, \boldsymbol{\nu}) = \min\limits_{\mathbf{x}} \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}, \boldsymbol{\nu}) = \begin{cases}
 -\mathbf{b}^{\top}\boldsymbol{\lambda} &\text{if } \mathbf{c}-\mathbf{A}^{\top}\boldsymbol{\lambda}-\boldsymbol{\nu}=\mathbf{0} \\
 -\infty &\text{otherwise}
