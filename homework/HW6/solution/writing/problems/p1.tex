@@ -1,0 +1,214 @@
+\item ~\defpoints{25} [Boosting]
+
+Suppose that we are interested in learning a classifier, such that at any turn of a game we can pose a question, like ``should I attack this ant hill now?", and get an answer.That is, we want to build a classifier which we can feed some features on the current game state, and get the output ``attack" or ``don't attack". There are many possible ways to define what the action ``attack" means, but for now let's define it as sending all friendly ants that can see the ant hill under consideration towards it.
+
+Let's recall the AdaBoost algorithm described in class. Its input is a dataset $\{(x_{i},y_{i})\}_{i=1}^{n}$, with $x_i$ being the $i$-th sample, and $y_{i}\in \{-1,1\}$ denoting the $i$-th label, $i=1,2,...,n$. The features might be composed of a count of the number of friendly ants that can see the ant hill under consideration, and a count of the number of enemy ants these friendly ants can see. For example, if there were 10 friendly ants that could see a particular ant hill, and 5 enemy ants that the friendly ants could see, we would have:
+$$x_1 = \begin{bmatrix} 10 \\ 5 \end{bmatrix}$$
+
+The label of the example $x_{1}$ is $y_{1} = 1$, once the friendly ants were successful in razing the enemy ant hill, and $y_{1} = -1$ otherwise. We could generate such examples by running a greedy bot (or any other opponent bot) against a bot that we periodically try to attack an enemy ant hill. Each time this bot tries the attack, we record (say, after $20$ turns or some other significant amount of time) whether the attack was successful or not.
+
+\begin{itemize}
+\item[(a)] Let $\epsilon_t$ denote the error of a weak classifier $h_t$:
+$$\epsilon_{t} = \sum_{i=1}^{n} D_{t}(i) \mathbb{I}(y_{i} \neq h_{t}(x_{i}))$$
+In the simple “attack” / “don't attack” scenario, suppose that we have implemented the following six weak classifiers:
+\begin{align*}
+h^{(1)}(x_{i}) = 2 * \mathbb{I}(x_{i1} \geq 2) - 1, \hspace{1cm}  & h^{(4)}(x_{i}) = 2 * \mathbb{I}(x_{i2} \leq 2) - 1,  \\
+h^{(2)}(x_{i}) = 2 * \mathbb{I}(x_{i1} \geq 6) - 1, \hspace{1cm}  & h^{(5)}(x_{i}) = 2 * \mathbb{I}(x_{i2} \leq 6) - 1,  \\
+h^{(3)}(x_{i}) = 2 * \mathbb{I}(x_{i1} \geq 10) - 1, \hspace{1cm} & h^{(6)}(x_{i}) = 2 * \mathbb{I}(x_{i2} \leq 10) - 1.
+\end{align*}
+Given ten training data points ($n = 10$) as shown in Table \ref{table1}:
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|cc|c|}
+    \hline
+    $i$ & $x_{i1}$ & $x_{i2}$ & $y_{i}$ \\ \hline
+    1 & 1.5 & 0.5 & 1 \\
+    2 & 2.5 & 1.5 & 1 \\
+    3 & 3.5 & 3.5 & 1 \\
+    4 & 6.5 & 5.5 & 1 \\
+    5 & 7.5 & 10.5 & 1 \\
+    6 & 1.5 & 2.5 & -1 \\
+    7 & 3.5 & 1.5 & -1 \\
+    8 & 5.5 & 5.5 & -1 \\
+    9 & 7.5 & 8.5 & -1 \\
+    10 & 1.5 & 10.5 & -1 \\
+    \hline
+    \end{tabular}
+    \caption{The training data in (a).}
+    \label{table1}
+\end{table}
+
+please show that what is the minimum value of $\epsilon_{1}$ and which of $h^{(1)},\cdots ,h^{(6)}$ achieve this value? Note that there may be multiple classifiers that all have the same $\epsilon_{1}$. You should list all classifiers that achieve the minimum $\epsilon_{1}$ value. ~\defpoints{5}
+
+\item[(b)] For all the questions in the remainder of this section, let $h_{1}$ denote $h^{(1)}$ chosen in the first round of boosting. (That is, $h^{(1)}$ was the classifier that achieved the minimum $\epsilon_{1}$.)
+\begin{enumerate}
+    \item[(1)] What is the value of $\alpha_{1}$ (the weight of this first classifier $h_{1}$)? ~\defpoints{2}
+
+    \item[(2)] What should $Z_{t}$ be in order to make sure the distribution $D_{t+1}$ is normalized correctly? That is, derive the formula of $Z_{t}$ in terms of $\epsilon_{t}$ that will ensure $\sum\limits_{i=1}^{n} D_{t+1}(i) = 1$. Please also derive the formula of $\alpha_{t}$ in terms of $\epsilon_{t}$. ~\defpoints{5}
+
+    \item[(3)] Which points will increase in significance in the second round of boosting? That is, for which points will we have $D_{1}(i) < D_{2}(i)$? What are the values of $D_{2}$ for these points? ~\defpoints{5}
+
+    \item[(4)] In the second round of boosting, the weights on the points will be different, and thus the error $\epsilon_2$ will also be different. Which of $h^{(1)}, \cdots, h^{(6)}$ will minimize $\epsilon_2$? (Which classifier will be selected as the second weak classifier $h_2$?) What is its value of $\epsilon_2$? ~\defpoints{5}
+
+    \item[(5)] What will the average error of the final classifier $H$ be, if we stop after these two rounds of boosting? That is, if $H(x) = \text{sign}(\alpha_{1}h_{1}(x) + \alpha_{2}h_{2}(x))$, what will the  training error $\epsilon = \dfrac{1}{n} \sum\limits_{i=1}^{n} \mathbb{I} (y_{i} \neq H(x_{i}))$ be? Is this more, less, or the same as the error we would get, if we just used one of the weak classifiers instead of this final classifier $H$ ~\defpoints{3}
+
+\end{enumerate}
+\end{itemize}
+
+\solution
+
+(a) Since $D_1$ is uniform on the training data, so we have $D_1(i)=\frac{1}{10}$ for $i=1,2,\cdots,10$. \\
+So for each classifer $h^{(j)}$, we can get the error $(\epsilon_1)_j$ is
+$$(\epsilon_1)_j=\mathbb{E}_{D_1}[\mathbb{I}(y_{i} \neq h^{(j)}(x_{i}))]=\sum_{i=1}^{n} D_1(i)\mathbb{I}(y_{i} \neq h^{(j)}(x_{i}))=\dfrac{1}{10}\sum_{i=1}^n\mathbb{I}(y_{i} \neq h^{(j)}(x_{i}))$$
+
+\begin{itemize}
+    \item For $h^{(1)}$, we can get that the data $x_1, x_7, x_8, x_9$ are misclassified, so we have
+    $(\epsilon_1)_1=\dfrac{1}{10}\cdot 4=0.4$
+
+    \item For $h^{(2)}$, we can get that the data $x_1, x_2, x_3, x_9$ are misclassified, so we have
+    $(\epsilon_1)_2=\dfrac{1}{10}\cdot 4=0.4$
+
+    \item For $h^{(3)}$, we can get that the data $x_1, x_2, x_3, x_4, x_5$ are misclassified, so we have
+    $(\epsilon_1)_3=\dfrac{1}{10}\cdot 5=0.5$
+
+    \item For $h^{(4)}$, we can get that the data $x_3, x_4, x_5, x_7$ are misclassified, so we have
+    $(\epsilon_1)_4=\dfrac{1}{10}\cdot 4=0.4$
+
+    \item For $h^{(5)}$, we can get that the data $x_5, x_6, x_7, x_8$ are misclassified, so we have
+    $(\epsilon_1)_5=\dfrac{1}{10}\cdot 4=0.4$
+
+    \item For $h^{(6)}$, we can get that the data $x_5, x_6, x_7, x_8, x_9$ are misclassified, so we have
+    $(\epsilon_1)_6=\dfrac{1}{10}\cdot 5=0.5$
+\end{itemize}
+
+So above all, the minimum value of $\epsilon_1$ is $0.4$, and the classifiers $h^{(1)}, h^{(2)}, h^{(4)}, h^{(5)}$ achieve this value.
+
+(b)(1) From (a), we can get that $\epsilon_1=0.4$.
+So $\alpha_1=\dfrac{1}{2}\log\dfrac{1-\epsilon_1}{\epsilon_1}=\dfrac{1}{2}\log\dfrac{1-0.4}{0.4}=\dfrac{1}{2}\log\dfrac{3}{2}$.
+
+So above all, $\alpha_1=\dfrac{1}{2}\log\dfrac{3}{2}$.
+
+(2) 1. To make sure the distribution $D_{t+1}$ is normalized correctly, we should make sure $\sum\limits_{i=1}^{n} D_{t+1}(i) = 1$. \\
+Since $D_{t+1}(i)=\dfrac{D_{t}(i)}{Z_t}\exp\left(-\alpha_ty_ih_t(x_i)\right)$, so we have
+$$\sum_{i=1}^{n} D_{t+1}(i)=\sum_{i=1}^{n}\dfrac{D_{t}(i)}{Z_t}\exp\left(-\alpha_ty_ih_t(x_i)\right)=\dfrac{1}{Z_t}\sum_{i=1}^{n}D_{t}(i)\exp(-\alpha_ty_ih_t(x_i))=1$$
+So we have
+\begin{align*}
+Z_t &= \sum_{i=1}^{n}D_{t}(i)\exp\left(-\alpha_ty_ih_t(x_i)\right) \\
+&= \sum_{i:y_i\neq h_t(x_i)}D_{t}(i)e^{\alpha_t}+\sum_{i:y_i=h_t(x_i)}D_{t}(i)e^{-\alpha_t} \\
+&= e^{\alpha_t}\sum_{i=1}^{n}D_{t}(i)\mathbb{I}(y_{i} \neq h_{t}(x_{i}))+e^{-\alpha_t}\sum_{i=1}^{n}D_{t}(i)\mathbb{I}(y_{i} = h_{t}(x_{i})) \\
+&= e^{\alpha_t}\epsilon_t+e^{-\alpha_t}(1-\epsilon_t) \qquad \text{(From the definition of $\epsilon_t$)}
+\end{align*}
+
+2. Then we need to derive $\alpha_t$ in terms of $\epsilon_t$. \\
+Suppose that we have run the AdaBoost algorithm for total $T$ iterations. \\
+Let $H_{\text{final}}=\text{sign}\left(\sum\limits_{t=1}^T\alpha_th_t\right)$ \\
+So we have the final training error is that
+\begin{align*}
+\epsilon &=\dfrac{1}{n}\sum_{i=1}^n\mathbb{I}(y_i\neq H_{\text{final}}(x_i))\\
+& =\frac{1}{n} \sum_{i=1}^n \begin{cases}1 & \text { if } y_i \neq H_{\text{final}}\left(x_i\right) \\
+0 & \text { otherwise }\end{cases} \\
+& =\frac{1}{n} \sum_{i=1}^n \begin{cases}1 & \text { if } y_i \left(\sum\limits_{t=1}^T\alpha_th_t\right) \leq 0 \\
+0 & \text { otherwise }\end{cases} \\
+& \leq \frac{1}{n} \sum_{i=1}^n \exp \left(-y_i \left(\sum\limits_{t=1}^T\alpha_th_t\right)\right)
+\end{align*}
+
+Since we totally have $T$ iterations, so for each iteration, we have
+\begin{align*}
+D_{T+1}(i) &= \dfrac{D_{T}(i)}{Z_T}\exp(-\alpha_{T}y_ih_{T}(x_i)) \\
+D_{T}(i) &= \dfrac{D_{T-1}(i)}{Z_{T-1}}\exp(-\alpha_{T-1}y_ih_{T-1}(x_i)) \\
+&\quad\quad\vdots \\
+D_2(i) &= \dfrac{D_1(i)}{Z_1}\exp(-\alpha_1y_ih_1(x_i)) \\
+D_1(i) &= \dfrac{1}{n}
+\end{align*}
+
+Multiply these equations, we can get that
+$$D_{T+1}(i)=\dfrac{1}{n}\prod_{t=1}^{T}\dfrac{1}{Z_t}\exp(-\alpha_ty_ih_t(x_i)) = \dfrac{1}{n}\cdot \dfrac{1}{\prod\limits_{t=1}^{T}Z_t}\cdot \exp\left(-y_i\sum_{t=1}^{T}\alpha_th_t(x_i)\right)$$
+i.e.
+$$\dfrac{1}{n}\cdot \exp\left(-y_i\sum_{t=1}^{T}\alpha_th_t(x_i)\right)=D_{T+1}(i)\prod_{t=1}^{T}Z_t$$
+
+If we put this into the final training error, we can get that
+$$\epsilon \leq \frac{1}{n} \sum_{i=1}^n \exp \left(-y_i \left(\sum_{t=1}^{T}\alpha_th_t\right)\right) = \sum_{i=1}^n D_{T+1}(i)\prod_{t=1}^{T}Z_t = \prod_{t=1}^{T}Z_t\left(\sum_{i=1}^n D_{T+1}(i)\right)$$
+Since $Z_t$ is to make sure $D_{t+1}$ is normalized correctly, so we have $\sum\limits_{i=1}^n D_{T+1}(i)=1$, so we have
+$$\epsilon \leq \prod_{t=1}^{T}Z_t$$
+So if we want to minimize the final error $\epsilon$, we should minimize $\prod\limits_{t=1}^{T}Z_t$. i.e. we should minimize $Z_t$ for each $t=1,2,\cdots,T$. \\
+So for each $Z_t=e^{\alpha_t}\epsilon_t+e^{-\alpha_t}(1-\epsilon_t)$:
+\begin{align*}
+\dfrac{\partial Z_t}{\partial\alpha_t} &= \epsilon_te^{\alpha_t}-(1-\epsilon_t)e^{-\alpha_t} \\
+\dfrac{\partial^2 Z_t}{\partial\alpha_t^2} &= \epsilon_te^{\alpha_t}+(1-\epsilon_t)e^{-\alpha_t}>0
+\end{align*}
+So we can get that $Z_t$ is a convex function of $\alpha_t$. \\
+So to minimize $Z_t$, we should make $\dfrac{\partial Z_t}{\partial\alpha_t}=0$. \\
+i.e.
+\begin{align*}
+\epsilon_te^{\alpha_t} &= (1-\epsilon_t)e^{-\alpha_t}\\
+e^{2\alpha_t} &= \dfrac{1-\epsilon_t}{\epsilon_t}\\
+\alpha_t &= \dfrac{1}{2}\log\dfrac{1-\epsilon_t}{\epsilon_t}
+\end{align*}
+
+Since $\epsilon_t=\mathbb{E}_{D_t}[\mathbb{I}(y_{i} \neq h_{t}(x_{i}))]=P_{D_t}(y_{i} \neq h_{t}(x_{i}))$, so $\epsilon_t\in(0,1)$. \\
+So we have $\dfrac{1-\epsilon_t}{\epsilon_t}>0$, so $\log\dfrac{1-\epsilon_t}{\epsilon_t}$ is valid. \\
+So we have derived that $\alpha_t=\dfrac{1}{2}\log\dfrac{1-\epsilon_t}{\epsilon_t}$. \\
+And put it into the equation (7), we can get that
+$$Z_t=\epsilon_te^{\alpha_t}+(1-\epsilon_t)e^{-\alpha_t}=\epsilon_t\sqrt{\dfrac{1-\epsilon_t}{\epsilon_t}}+(1-\epsilon_t)\sqrt{\dfrac{\epsilon_t}{1-\epsilon_t}}=2\sqrt{\epsilon_t(1-\epsilon_t)}$$
+
+So above all, we have derived that
+\begin{align*}
+Z_t &= 2\sqrt{\epsilon_t(1-\epsilon_t)} \\
+\alpha_t &= \dfrac{1}{2}\log\dfrac{1-\epsilon_t}{\epsilon_t}
+\end{align*}
+
+(3) From (2), we can get that $Z_1=2\sqrt{\epsilon_1(1-\epsilon_1)}=2\sqrt{0.4\cdot 0.6}=0.4\sqrt{6}$. \\
+And $\alpha_1=\dfrac{1}{2}\log\dfrac{1-\epsilon_1}{\epsilon_1}=\dfrac{1}{2}\log\dfrac{1-0.4}{0.4}=\dfrac{1}{2}\log\dfrac{3}{2}$. \\
+Since we take $h_1=h^{(1)}$, so
+$$D_2(i)=\dfrac{D_1(i)}{Z_1}\exp\left(-\alpha_1y_ih_1(x_i)\right)=\dfrac{1}{10\cdot 0.4\sqrt{6}}\exp\left(-\dfrac{1}{2}\log\dfrac{3}{2}\cdot y_i\cdot h^{(1)}(x_i)\right)$$
+From (a), we can get that for points $x_1,x_7,x_8,x_9$, which are misclassified, so we have $y_i\cdot h^{(1)}(x_i)=-1$. \\
+So their weight $D_2(i)=\dfrac{1}{10\cdot 0.4\sqrt{6}}\exp\left(-\dfrac{1}{2}\log\dfrac{3}{2}\cdot (-1)\right)=\dfrac{1}{10\cdot 0.4\sqrt{6}}\cdot \sqrt{\dfrac{3}{2}}=\dfrac{1}{8}>D_1(i)=\dfrac{1}{10}$. \\
+And for other points $x_2,x_3,x_4,x_5,x_6,x_{10}$, which are correctly classified, so we have $y_i\cdot h^{(1)}(x_i)=1$. \\
+So their weight $D_2(i)=\dfrac{1}{10\cdot 0.4\sqrt{6}}\exp\left(-\dfrac{1}{2}\log\dfrac{3}{2}\cdot 1\right)=\dfrac{1}{10\cdot 0.4\sqrt{6}}\cdot \sqrt{\dfrac{2}{3}}=\dfrac{1}{12}<D_1(i)=\dfrac{1}{10}$. \\
+
+So above all, the misclassified points $x_1,x_7,x_8,x_9$ will increase in significance in the second round of boosting, and their weight $D_2(i)=\dfrac{1}{8}$. \\
+
+(4) From (3), we know that $D_2(1)=D_2(7)=D_2(8)=D_2(9)=\dfrac{1}{8}$,\\
+and $D_2(2)=D_2(3)=D_2(4)=D_2(5)=D_2(6)=D_2(10)=\dfrac{1}{12}$. \\
+So for each classifer $h^{(j)}$, we can get the error $(\epsilon_2)_j$ is
+$$(\epsilon_2)_j=\mathbb{E}_{D_2}[\mathbb{I}(y_{i} \neq h^{(j)}(x_{i}))]=\sum_{i=1}^{n} D_2(i)\mathbb{I}(y_{i} \neq h^{(j)}(x_{i}))$$
+
+\begin{itemize}
+    \item For $h^{(1)}$, we have $(\epsilon_2)_1=\dfrac{1}{8}\cdot 4+\dfrac{1}{12}\cdot 0=\dfrac{1}{2}$.
+
+    \item For $h^{(2)}$, we have $(\epsilon_2)_2=\dfrac{1}{8}\cdot 2+\dfrac{1}{12}\cdot 2=\dfrac{5}{12}$.
+
+    \item For $h^{(3)}$, we have $(\epsilon_2)_3=\dfrac{1}{8}\cdot 1+\dfrac{1}{12}\cdot 4=\dfrac{11}{24}$.
+
+    \item For $h^{(4)}$, we have $(\epsilon_2)_4=\dfrac{1}{8}\cdot 1+\dfrac{1}{12}\cdot 3=\dfrac{3}{8}$.
+
+    \item For $h^{(5)}$, we have $(\epsilon_2)_5=\dfrac{1}{8}\cdot 2+\dfrac{1}{12}\cdot 2=\dfrac{5}{12}$.
+
+    \item For $h^{(6)}$, we have $(\epsilon_2)_6=\dfrac{1}{8}\cdot 3+\dfrac{1}{12}\cdot 2=\dfrac{13}{24}$.
+\end{itemize}
+
+So above all, the minimum value of $\epsilon_2$ is $\dfrac{3}{8}$, and the classifier $h^{(4)}$ achieve this value.
+
+(5) From (1), we can get that $\alpha_1=\dfrac{1}{2}\log\dfrac{3}{2}$. \\
+And from (4), we can get that $\epsilon_2=\dfrac{3}{8}$. \\
+So $\alpha_2=\dfrac{1}{2}\log\dfrac{1-\epsilon_2}{\epsilon_2}=\dfrac{1}{2}\log\dfrac{1-\frac{3}{8}}{\frac{3}{8}}=\dfrac{1}{2}\log\dfrac{5}{3}$. \\
+And since $h_1(x)=h^{(1)}(x)$ and $h_2(x)=h^{(4)}(x)$, so
+$$H(x)=\text{sign}(\alpha_1h_1(x)+\alpha_2h_2(x))=\text{sign}\left(\dfrac{1}{2}\log\dfrac{3}{2}h^{(1)}(x)+\dfrac{1}{2}\log\dfrac{5}{3}h^{(4)}(x)\right)$$
+
+There are total $4$ possible combinations of $h^{(1)}(x)$ and $h^{(4)}(x)$, which are $(-1,-1), (1,-1), (-1,1), (1,1)$. \\
+So we can get that
+\begin{itemize}
+    \item For $(-1,-1)$, we have $H(x)=\text{sign}\left(\dfrac{1}{2}\log\dfrac{3}{2}\cdot (-1)+\dfrac{1}{2}\log\dfrac{5}{3}\cdot (-1)\right)=-1$.
+    \item For $(1,-1)$, we have $H(x)=\text{sign}\left(\dfrac{1}{2}\log\dfrac{3}{2}\cdot 1+\dfrac{1}{2}\log\dfrac{5}{3}\cdot (-1)\right)=\text{sign}(\dfrac{1}{2}\log\dfrac{9}{10})=-1$.
+    \item For $(-1,1)$, we have $H(x)=\text{sign}\left(\dfrac{1}{2}\log\dfrac{3}{2}\cdot (-1)+\dfrac{1}{2}\log\dfrac{5}{3}\cdot 1\right)=\text{sign}(\dfrac{1}{2}\log\dfrac{10}{9})=1$.
+    \item For $(1,1)$, we have $H(x)=\text{sign}\left(\dfrac{1}{2}\log\dfrac{3}{2}\cdot 1+\dfrac{1}{2}\log\dfrac{5}{3}\cdot 1\right)=1$.
+\end{itemize}
+
+So we can get that $x_3, x_4, x_5, x_7$ are misclassified by $H(x)$(actually, $H(x)$ is exactly same with $h^{(2)}(x)$), so we have
+$$\epsilon=\dfrac{1}{n}\sum_{i=1}^n\mathbb{I}(y_i\neq H(x_i))=\dfrac{1}{10}\cdot 4=0.4$$
+And we have $\epsilon_1=\min\limits_{i=1,2,\cdots,6}(\epsilon_1)_i=\min\{0.4, 0.4, 0.5, 0.4, 0.4, 0.5\}=0.4$,
+so we can get that $\epsilon=\epsilon_1$.
+
+So above all, the average error of the final classifier $H$ is $0.4$, and it is the same as the error we would get, if we just used one of the weak classifiers instead of this final classifier $H$.
+
+\newpage

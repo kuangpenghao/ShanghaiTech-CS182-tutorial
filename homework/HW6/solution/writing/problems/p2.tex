@@ -1,0 +1,41 @@
+\item \defpoints{10} [Equivalence of PCA objectives]
+
+Consider a dataset of $n$ observations $\mathbf{X}\in \mathbb{R}^{n \times d}$, and our goal is to project the data onto a subspace having dimensionality $p$, $p<d$. Prove that PCA based on projected variance maximization is equivalent to PCA based on projected error (Euclidean error) minimization.
+
+\solution
+
+Suppose that all sampled points are centered, so the sample mean is $\mathbf{\mu}=\mathbf{0}$. \\
+And suppose that $\mathbf{v}$ is the direction of the projection. Where $\mathbf{v}\in \mathbb{R}^d$ and let $\|\mathbf{v}\|=1$. \\
+So for each sampled point $X_i$, the projection of $X_i$ on the direction $\mathbf{v}$ is $X_i\cdot \mathbf{v}=X_i^{\top}\mathbf{v}$. \\
+And for the PCA problem, our goal is to find the most suitable $p$ directions $\mathbf{v}$. We could consider them seperately, and with the method to take the most $p$ suitable directions $\mathbf{v}$.
+
+1. The method based on projected variance maximization: \\
+The mean of the projection values is that $\mathbf{\mu'}=\dfrac{1}{n}\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)=\mathbf{v}^{\top}(\dfrac{1}{n}\sum\limits_{i=1}^nX_i)=\mathbf{v}^{\top}\mathbf{\mu}=\mathbf{0}$, since $\mathbf{\mu}=\mathbf{0}$. \\
+So the objective function is to maximize the projected variance, which is
+$$\max_{\mathbf{v}} \dfrac{1}{n}\sum\limits_{i=1}^n \left(X_i^{\top}\mathbf{v}\right)^2$$
+
+2. As for the method based on projected error minimization: \\
+The objective function is to minimize the projected error, which is
+$$\min_{\mathbf{v}} \sum\limits_{i=1}^n \|X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\|^2$$
+
+From the vector's addition operation, we can get that $X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}$ is perpendicular to $\mathbf{v}$. \\
+So we have $(X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v})\cdot \mathbf{v}=0$. So
+$$\|X_i\|^2=\|\left(X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\right)+\left(\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\right)\|^2=\left\|X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\right\|^2+\left\|\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\right\|^2$$
+Since $\|\mathbf{v}\|=1$, so
+\begin{align*}
+& \|\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\|^2=\left(X_i^{\top}\mathbf{v}\right)^2\|\mathbf{v}\|^2=\left(X_i^{\top}\mathbf{v}\right)^2 \\
+\Rightarrow\qquad& \|X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\|^2=\|X_i\|^2-\left(X_i^{\top}\mathbf{v}\right)^2
+\end{align*}
+So the objective function is equivalent to
+$$\min_{\mathbf{v}} \sum\limits_{i=1}^n \|X_i-\left(X_i^{\top}\mathbf{v}\right)\mathbf{v}\|^2=\min_{\mathbf{v}} \sum\limits_{i=1}^n \|X_i\|^2-\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)^2$$
+Since our goal is to find the suitable $\mathbf{v}$, so the sample points $X_i$ is fixed.\\
+So $\sum\limits_{i=1}^n \|X_i\|^2$ is a constant. And $n$ is also a constant.\\
+So the objective function is equivalent to
+$$\min_{\mathbf{v}} \sum\limits_{i=1}^n \|X_i\|^2-\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)^2\Leftrightarrow \min_{\mathbf{v}} -\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)^2\Leftrightarrow \max_{\mathbf{v}}\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)^2\Leftrightarrow \max_{\mathbf{v}}\dfrac{1}{n}\sum\limits_{i=1}^n\left(X_i^{\top}\mathbf{v}\right)^2 $$
+
+So above all, the objective function of the method based on projected error minimization is the same as the objective function of the method based on projected variance maximization. \\
+And they also have the same constrain that is $\|\mathbf{v}\|=1$. \\
+So the two method is actually the same optimization problem. \\
+So PCA based on projected variance maximization is equivalent to PCA based on projected error minimization.
+
+\newpage

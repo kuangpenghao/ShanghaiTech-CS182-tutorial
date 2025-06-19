@@ -1,0 +1,81 @@
+\item \defpoints{15} [Performing PCA by Hand]
+
+Let's do principal components analysis (PCA)! Consider this sample of six points $X_i \in \mathbb{R}^2$.
+$$\left\{
+\left[\begin{array}{l} 0 \\ 0 \end{array}\right],
+\left[\begin{array}{l} 0 \\ 1 \end{array}\right],
+\left[\begin{array}{l} 1 \\ 0 \end{array}\right],
+\left[\begin{array}{l} 1 \\ 2 \end{array}\right],
+\left[\begin{array}{l} 2 \\ 1 \end{array}\right],
+\left[\begin{array}{l} 2 \\ 2 \end{array}\right]\right\}$$
+
+(a) Compute the mean of the sample points and write the centered design matrix $\dot{X}$. \defpoints{4}
+(Hint: The sample mean is by subtracting the mean from each sample.)
+
+(b) Find all the principal components of this sample. Write them as unit vectors. \defpoints{5}
+(Hint: The principal components of our dataset are the eigenvectors of the matrix $\dot{X}^{\top} \dot{X}=
+$. The characteristic polynomial of this symmetric matrix is $\det\left(\lambda I-\dot{X}^{\top} \dot{X}\right)$.)
+
+(c) Which of those two principal components would be preferred if you use only one? \defpoints{2} \\
+What information does the PCA algorithm use to decide that one principal components is better than another? \defpoints{2} \\
+From an optimization point of view, why do we prefer that one? \defpoints{2}
+
+\solution
+
+(a) Original sample matrix $X\in \mathbb{R}^{n\times d}=\mathbb{R}^{6\times 2}$. \\
+The sample mean is that $\mu=\dfrac{1}{6}\sum\limits_{i=1}^6 X_i=\left[\begin{array}{l} 1 \\ 1 \end{array}\right]$. After subtracting the mean from each sample, we form the centered design matrix
+$$\dot{X}=X-\mu=\begin{bmatrix}
+-1 & -1 \\
+-1 & 0 \\
+0 & -1 \\
+0 & 1 \\
+1 & 0 \\
+1 & 1
+\end{bmatrix}$$
+
+(b) We can calculate that
+$$\dot{X}^{\top} \dot{X} = \begin{bmatrix}
+4 & 2 \\
+2 & 4
+\end{bmatrix}$$
+
+The characteristic polynomial of this symmetric matrix is
+$$\det(\lambda I - \dot{X}^{\top} \dot{X})=(\lambda-2)(\lambda-6)$$
+So the eigenvalues of $\dot{X}^{\top} \dot{X}$ are $\lambda_1=6, \lambda_2=2$.
+
+For $\lambda_1=6$, we have the corresponding eigenvector is that $\mathbf{v}_1=
+\dfrac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}$.
+
+And for $\lambda_2=2$, we have the corresponding eigenvector is that $\mathbf{v}_2=
+\dfrac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}$.
+
+So above all, the principal components of this sample are
+$\dfrac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ and $\dfrac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}$.
+
+(c) 1. Since $\lambda_1=6>\lambda_2=2$, so we prefer $\mathbf{v}_1=\dfrac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ if we use only one principal component.
+
+2. The PCA algorithm use the variance of the data projected onto the corresponding eigenvector $\mathbf{v}$ or the minimum projected error to decide that one principal components is better than another. \\
+Or we can say that the PCA algorithm use the eigenvalue of the matrix $\dot{X}^{\top} \dot{X}$ to decide that one principal components is better than another.
+
+3. From an optimization point of view, we prefer $\mathbf{v}_1$ because the variance of the data projected onto $\mathbf{v}_1$ is larger than the variance of the data projected onto $\mathbf{v}_2$.
+And since $\lambda$ is the eigenvalue of $\dot{X}^{\top} \dot{X}$, so
+\begin{align*}
+    \dot{X}^{\top} \dot{X}\mathbf{v} &= \lambda\mathbf{v} \\
+    \mathbf{v}^{\top}\dot{X}^{\top} \dot{X}\mathbf{v} &= \mathbf{v}^{\top}\lambda\mathbf{v}\ \ &(\text{multiply } \mathbf{v}^{\top} \text{to the left on both sides}) \\
+    \mathbf{v}^{\top}\dot{X}^{\top} \dot{X}\mathbf{v} &= \lambda\ \ &(\mathbf{v}^{\top}\mathbf{v}=\|\mathbf{v}\|^2=1)
+\end{align*}
+
+Also, the variance of the data projected onto $\mathbf{v}$ is
+\begin{align*}
+\dot{\sigma}^2 &= \dfrac{1}{n}\sum\limits_{i=1}^n \left(\dot{X_i}^{\top}\mathbf{v}\right)^2 \qquad \text{(the centered designed $\dot{X_i}$ is with mean 0)} \\
+&= \dfrac{1}{n}\sum\limits_{i=1}^n \mathbf{v}^{\top}\dot{X_i}\dot{X_i}^{\top}\mathbf{v} \\
+&= \mathbf{v}^{\top}\left(\dfrac{1}{n}\sum\limits_{i=1}^n\dot{X_i}\dot{X_i}^{\top}\right)\mathbf{v} \\
+&= \mathbf{v}^{\top}\left(\dfrac{1}{n}\dot{X}^{\top}\dot{X}\right)\mathbf{v}\qquad \text{(the covirance matrix of the centered designed $\dot{X}$ is $\dfrac{1}{n}\dot{X}^{\top}\dot{X}$)} \\
+&= \dfrac{1}{n}\mathbf{v}^{\top}\dot{X}^{\top}\dot{X}\mathbf{v}
+\end{align*}
+
+So $\lambda=n\dot{\sigma}^2$.
+
+Since the sample points' number $n$ is a constant, so we can use the eigenvalue to represent the variance of the data projected onto the corresponding eigenvector.
+
+\newpage
