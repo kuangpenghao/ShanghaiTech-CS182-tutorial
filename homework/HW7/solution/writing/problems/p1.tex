@@ -1,0 +1,81 @@
+\item \defpoints{15} [Expectation Maximization Algorithm]
+
+Consider a probabilistic model in which we collectively denote the observed variables by $X$ and all of the hidden variables by $Z$. The joint distribution $p(X,Z|\theta)$ is parameterized by $\theta$. Our goal is to maximize the likelihood function given by
+$$p(X|\theta)$$
+
+\begin{itemize}
+\item[(a)] Given an arbitrary distribution $q$, show that the log-likelihood of $X$ is~\defpoints{5}
+$$\log p(X|\theta) = \E_{Z\sim q}\left [\log\dfrac{p(X, Z|\theta)}{q(Z)}\right] + KL\left(q(Z)\| p(Z|X,\theta)\right)$$
+
+\item[(b)] Next let's consider the expectation step. First show the evidence lower bound (ELBO) is a lower bound of the log-likelihood. ~\defpoints{5}
+$$\log p(X|\theta)\geq\E_{Z|X,\theta^{(t-1)}}\left[\log\dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$$
+where $\theta^{(t-1)}$ is the parameter estimated in the previous iteration.
+
+\item[(c)] We want to maximize the ELBO, $\E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$ since maximizing $p(X|\theta)$ is hard. EM algorithm defines $Q(\theta|\theta^{(t-1)}) = \E_{Z|X,\theta^{(t-1)}}\left[ \log p(X,Z|\theta) \right]$. The M-step is given by:
+$$\theta^{(t)} \leftarrow \argmax_{\theta} Q(\theta|\theta^{(t-1)})$$
+Show that maximizing $Q(\theta|\theta^{(t-1)})$ and maximizing the ELBO is equivalent. ~\defpoints{5} Formally,
+$$\argmax_{\theta} Q(\theta|\theta^{(t-1)}) = \argmax_{\theta} \E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$$
+\end{itemize}
+
+\solution
+
+(a) With Bayes' Rule, we can get that
+$$p(X|\theta)=\dfrac{p(X,Z|\theta)}{p(Z|X,\theta)} = \dfrac{p(X,Z|\theta)}{q(Z)}\dfrac{q(Z)}{p(Z|X,\theta)}$$
+
+So the log-likelihood of $X$ is
+$$\log p(X|\theta)=\log\left [\dfrac{p(X,Z|\theta)}{q(Z)}\dfrac{q(Z)}{p(Z|X,\theta)}\right]=\log\dfrac{p(X,Z|\theta)}{q(Z)}+\log\dfrac{q(Z)}{p(Z|X,\theta)}$$
+
+Take the expectation of $Z$ with respect to $q(Z)$ to the both side, we can get that
+$$\E_{Z\sim q}\left [\log p(X|\theta)\right]=\E_{Z\sim q}\left [\log\dfrac{p(X,Z|\theta)}{q(Z)}+\log\dfrac{q(Z)}{p(Z|X,\theta)}\right]$$
+With the linearty of expectation:
+$$\E_{Z\sim q}\left [\log p(X|\theta)\right]=\E_{Z\sim q}\left [\log\dfrac{p(X,Z|\theta)}{q(Z)}\right]+\E_{Z\sim q}\left [\log\dfrac{q(Z)}{p(Z|X,\theta)}\right]$$
+
+For $\E_{Z\sim q}\left [\log p(X|\theta)\right]$, we can get that it has nothing with $Z$, so
+$$\E_{Z\sim q}\left [\log p(X|\theta)\right] = \int q(z)\log p(X|\theta)\dz=\log p(X|\theta)\int q(z)\dz = \log p(X|\theta)$$
+
+For $\E_{Z\sim q}\left [\log\dfrac{q(Z)}{p(Z|X,\theta)}\right]$, accoding to the definition of KL divergence:
+$$KL(p\|q)=\int p(z)\log\dfrac{p(z)}{q(z)}\dz$$
+we can get that:
+$$\E_{Z\sim q}\left [\log\dfrac{q(z)}{p(z|X,\theta)}\right] = \int q(z)\log\dfrac{q(z)}{p(z|X,\theta)}\dz = KL(q(Z)\|p(Z|X,\theta))$$
+
+So above all, we have proved that
+$$\log p(X|\theta)=\E_{Z\sim q}\left [\log\dfrac{p(X,Z|\theta)}{q(Z)}\right]+KL(q(Z)\|p(Z|X,\theta))$$
+
+(b) For the log-likelihood:
+\begin{align*}
+\log p(X|\theta) &= \log\int p(X,z|\theta)\dz \\
+&= \log\int p(z|X,\theta^{(t-1)})\dfrac{p(X,z|\theta)}{p(z|X,\theta^{(t-1)})}\dz \\
+&= \log \E_{Z|X,\theta^{(t-1)}}\left[\dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]
+\end{align*}
+
+Since $\log$ is a concave function, with Jensen's inequality, we have $\log \E(X)\geq \E(\log X)$, so
+$$\log \E_{Z|X,\theta^{(t-1)}}\left[\dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]
+\geq \E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$$
+
+So above all, we have proved that the ELBO is that
+$$\log p(X|\theta)\geq\E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$$
+
+(c) \begin{align*}
+&\qquad \E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right] \\
+&= \int p(z|X,\theta^{(t-1)})\log \dfrac{p(X,z|\theta)}{p(z|X,\theta^{(t-1)})}\dz \\
+&= \int p(z|X,\theta^{(t-1)})(\log p(X,z|\theta) - \log  p(z|X,\theta^{(t-1)}))\dz \\
+&= \int p(z|X,\theta^{(t-1)})\log p(X,z|\theta)\dz-\int p(z|X,\theta^{(t-1)})\log p(z|X,\theta^{(t-1)})\dz
+\end{align*}
+
+Since $Q(\theta|\theta^{(t-1)})=\E_{Z|X,\theta^{(t-1)}}\left[\log p(X,Z|\theta)\right]$. So we have
+$$\int p(z|X,\theta^{(t-1)})\log p(X,z|\theta)\dz=\E_{Z|X,\theta^{(t-1)}}\left[\log p(X,Z|\theta)\right]=Q(\theta|\theta^{(t-1)})$$
+
+And with the definition of entropy: $H(X)=-\int p(x)\log p(x)\dx$, we can get that
+$$-\int p(z|X,\theta^{(t-1)})\log p(z|X,\theta^{(t-1)})\dz=H(Z|X,\theta^{(t-1)})$$
+
+So
+$$\int p(z|X,\theta^{(t-1)})\log p(X,z|\theta)\dz-\int p(z|X,\theta^{(t-1)})\log p(z|X,\theta^{(t-1)})\dz$$
+$$=Q(\theta|\theta^{(t-1)})+H(Z|X,\theta^{(t-1)})$$
+
+Since $H(Z|X,\theta^{(t-1)})$ is a constant of $\theta$, so we can get that
+$$\argmax\limits_{\theta} \E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right] = \argmax\limits_{\theta} Q(\theta|\theta^{(t-1)}) + H(Z|X,\theta^{(t-1)}) = \argmax\limits_{\theta} Q(\theta|\theta^{(t-1)})$$
+
+So above all, we have proved that
+$$\argmax\limits_{\theta} Q(\theta|\theta^{(t-1)}) = \argmax\limits_{\theta} \E_{Z|X,\theta^{(t-1)}}\left[\log \dfrac{p(X,Z|\theta)}{p(Z|X,\theta^{(t-1)})}\right]$$
+
+\newpage

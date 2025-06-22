@@ -1,0 +1,119 @@
+\item \defpoints{15} [Performing K-Means by Hand]
+
+Let's do $k$-means! To initialize the centroids, we use the $k$-means++ algorithm. And then use Euclidean distance to cluster the 8 data points into $k=3$ clusters. The coordinates of the data points are:
+\begin{align*}
+    x^{(1)} & = (2,8),  \ x^{(2)} = (2,5), \ x^{(3)} = (1,2), \ x^{(4)} = (5,8), \\
+    x^{(5)} & = (7,3),  \ x^{(6)} = (6,4), \ x^{(7)} = (8,4), \ x^{(8)} = (4,7).
+\end{align*}
+Suppose that initially the first cluster centers is $x^{(1)}$. \\
+{\color{blue} To ensure consistent results, please use random numbers in the order shown in the table below. When selecting a center, arrange it in ascending order of sequence number. For example, when the normalized weights of $5$ nodes are $0.2$, $0.1$, $0.3$, $0.3$, and $0.1$, if the random number is $0.3$, the selected node is the third one. Note that you don't necessarily need to use all of them.}
+\begin{table*}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    0.6 & 0.2 & 0.5 & 0.9 & 0.3 \\
+    \hline
+    \end{tabular}
+\end{table*}
+
+\begin{itemize}
+\item[(a)] Perform the $k$-means++ algorithm to initialize other centers and report the coordinates of the resulting centroids. ~\defpoints{5}
+\item[(b)] Calculate the loss function
+$$Q(r,c) = \dfrac{1}{n} \sum_{i=1}^n \sum_{j=1}^K r_{ij}\left\|x^{(i)} - c_j\right\|_2^2$$
+where $r_{ij} = 1$ if $x^{(i)}$ belongs to the $j$-th cluster and 0 otherwise. ~\defpoints{5}
+\item[(c)] How many more iterations after initialization are needed to converge? ~\defpoints{3} Calculate the loss after it converged. ~\defpoints{2}
+\end{itemize}
+
+\solution
+
+(a) We can calculate the other points' Euclidean distance to $x^{(1)}$ is $D\left(x^{(i)}\right)$, and the probability of selecting $x^{(i)}$ as the next center is $p\left(x^{(i)}\right)$, which is proportional to $D\left(x^{(i)}\right)^2$. \\
+So the $D^2\left(x^{(i)}\right)$ and $p\left(x^{(i)}\right)$ are shown in the table below.
+\begin{table*}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+	\hline
+	point & $x^{(1)}$ & $x^{(2)}$ & $x^{(3)}$ & $x^{(4)}$ & $x^{(5)}$ & $x^{(6)}$ & $x^{(7)}$ & $x^{(8)}$ \\
+	\hline
+	$D^2\left(x^{(i)}\right)$ & $0$ & $9$ & $37$ & $9$ & $50$ & $32$ & $52$ & $5$ \\
+	\hline
+	$p\left(x^{(i)}\right)$ & $0$ & $0.05$ & $0.19$ & $0.05$ & $0.26$ & $0.16$ & $0.27$ & $0.03$ \\
+	\hline
+    \end{tabular}
+\end{table*}
+
+We randomly sample a point. The random number is $0.6$, and since $\sum\limits_{i=1}^5 p\left(x^{(i)}\right)=0.55<0.6$, $\sum\limits_{i=1}^6 p\left(x^{(i)}\right)=0.71>0.6$, so we choose $x^{(6)}$ as the second class center.
+
+2. Then, we need to choose the third center. \\
+Suppose that for the $i$-th point $x^{(i)}$, the Euclidean distance for it to $x^{(1)}$ is $D_1\left(x^{(i)}\right)$,
+the Euclidean distance for it to $x^{(6)}$ is $D_2\left(x^{(i)}\right)$. \\
+So the Euclidean distance to the closest center $D\left(x^{(i)}\right)=\min\left(D_1\left(x^{(i)}\right),D_2\left(x^{(i)}\right)\right)$. \\
+So the $D_1^2\left(x^{(i)}\right),D_2^2\left(x^{(i)}\right),D^2\left(x^{(i)}\right)$ and $p\left(x^{(i)}\right)$ are shown in the table below.
+\begin{table*}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+        \hline
+        point & $x^{(1)}$ & $x^{(2)}$ & $x^{(3)}$ & $x^{(4)}$ & $x^{(5)}$ & $x^{(6)}$ & $x^{(7)}$ & $x^{(8)}$ \\
+        \hline
+        $D_1^2\left(x^{(i)}\right)$ & $0$ & $9$ & $37$ & $9$ & $50$ & $32$ & $52$ & $5$ \\
+        \hline
+        $D_2^2\left(x^{(i)}\right)$ & $32$ & $17$ & $29$ & $17$ & $2$ & $0$ & $4$ & $13$ \\
+        \hline
+        $D^2\left(x^{(i)}\right)$ & $0$ & $9$ & $29$ & $9$ & $2$ & $0$ & $4$ & $5$ \\
+        \hline
+        $p\left(x^{(i)}\right)$ & $0$ & $0.16$ & $0.50$ & $0.16$ & $0.03$ & $0$ & $0.07$ & $0.09$ \\
+        \hline
+    \end{tabular}
+\end{table*}
+
+We randomly sample a point. The random number is $0.2$, and since $\sum\limits_{i=1}^2p\left(x^{(i)}\right)=0.16<0.2$, $\sum\limits_{i=1}^3p\left(x^{(i)}\right)=0.76>0.2$, so we choose $x^{(3)}$ as the third class center.
+
+So above all, the initialized centers are:
+$$c_1=x^{(1)}=(2,8), c_2=x^{(3)}=(1,2), c_3=x^{(6)}=(6,4)$$
+
+(b) The centers after initialization are:
+$$c_1=x^{(1)}=(2,8), c_2=x^{(3)}=(1,2), c_3=x^{(6)}=(6,4)$$
+And $x^{(1)},x^{(2)},x^{(4)},x^{(8)}$ belong to $c_1$, $x^{(3)}$ belong to $c_2$, $x^{(5)},x^{(6)},x^{(7)}$ belong to $c_3$.
+
+So the loss is
+$$Q(r,c)=\dfrac{1}{8}\sum\limits_{i=1}^8\sum\limits_{j=1}^3r_{ij}\left\|x^{(i)}-c_j\right\|^2=\dfrac{(0+9+9+5)+(0)+(2+0+4)}{8}=\dfrac{29}{8}$$
+
+So above all, the loss is $Q(r,c)=\dfrac{29}{8}$.
+
+(c) For the $1$-st iteration, we have:
+\begin{align*}
+c_1 &= \dfrac{1}{4}(x^{(1)}+x^{(2)}+x^{(4)}+x^{(8)})=\left(\dfrac{13}{4},7\right) \\
+c_2 &= x^{(3)}=(1,2) \\
+c_3 &= \dfrac{1}{3}(x^{(5)}+x^{(6)}+x^{(7)})=\left(7,\dfrac{11}{3}\right)
+\end{align*}
+
+Then we calculate the Euclidean distance for each point to each center:
+$$D_1^2\left(x^{(i)}\right)=\left\|x^{(i)}-c_1\right\|^2, D_2^2\left(x^{(i)}\right)=\left\|x^{(i)}-c_2\right\|^2, D_3^2\left(x^{(i)}\right)=\left\|x^{(i)}-c_3\right\|^2$$
+The row $c_j$ means that the of the corresponding point is to the center $c_j$. \\
+i.e. for the point $x^{(i)}$, the distance to the center $c_j$ has the smallest Euclidean distance among all centers.
+\begin{table*}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+	\hline
+	point & $x^{(1)}$ & $x^{(2)}$ & $x^{(3)}$ & $x^{(4)}$ & $x^{(5)}$ & $x^{(6)}$ & $x^{(7)}$ & $x^{(8)}$ \\
+	\hline
+	center $c_j$ & $c_1$ & $c_1$ & $c_2$ & $c_1$ & $c_3$ & $c_3$ & $c_3$ & $c_1$ \\
+	\hline
+    \end{tabular}
+\end{table*}
+
+And we can see that the center $c_j$ for each point is the same as the previous iteration. \\
+So it converged. i.e. it only needs $1$ iteration to converge.
+
+And we can calculate the Euclidean distance for each point to their center:
+\begin{align*}
+D^2\left(x^{(1)}\right) &= \dfrac{41}{16}, D^2\left(x^{(2)}\right)=\dfrac{89}{16}, D^2\left(x^{(3)}\right)=0 \\
+D^2\left(x^{(4)}\right) &= \dfrac{65}{16}, D^2\left(x^{(5)}\right)=\dfrac{4}{9}, D^2\left(x^{(6)}\right)=\dfrac{10}{9} \\
+D^2\left(x^{(7)}\right) &= \dfrac{10}{9}, D^2\left(x^{(8)}\right)=\dfrac{9}{16}
+\end{align*}
+
+So the loss after it converged is:
+$$Q(r,c)=\dfrac{1}{8}\sum\limits_{i=1}^8\sum\limits_{j=1}^3r_{ij}\left\|x^{(i)}-c_j\right\|^2 = \dfrac{\left(\dfrac{41}{16}+\dfrac{89}{16}+\dfrac{65}{16}+\dfrac{9}{16}\right) + 0 + \left(\dfrac{4}{9}+\dfrac{10}{9}+\dfrac{10}{9}\right)}{8}=\dfrac{185}{96}$$
+
+So above all, $1$ iteration is needed to converge, and the loss after it converged is $Q(r,c)=\dfrac{185}{96}$.
+
+\newpage
